@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jason.user.biz.mapper.UserMapper">
+
+    <resultMap id="userInfoMap" type="com.jason.user.biz.po.UserInfoPo">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="username" property="username" javaType="string" jdbcType="VARCHAR"/>
+        <result column="email" property="email" javaType="string" jdbcType="VARCHAR"/>
+        <result column="enabled" property="enabled" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="account_locked" property="accountLocked" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="account_expired" property="accountExpired" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="credentials_expired" property="credentialsExpired" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="introduction" property="introduction" javaType="string" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" javaType="string" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" javaType="string" jdbcType="VARCHAR"/>
+        <result column="recently_time" property="recentlyTime" javaType="string" jdbcType="VARCHAR"/>
+        <result column="province" property="province" javaType="int" jdbcType="INTEGER"/>
+        <result column="birth" property="birth" javaType="string" jdbcType="VARCHAR"/>
+        <collection property="roles" column="id" javaType="list" ofType="com.jason.user.biz.po.RolePo" select="getUserRoleById"/>
+    </resultMap>
+
+    <resultMap id="roleMap" type="com.jason.user.biz.po.RolePo">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="name" property="name" javaType="string" jdbcType="VARCHAR"/>
+        <result column="name_zh" property="nameZH" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getUserRoleById" resultMap="roleMap">
+        SELECT
+            r2.id,
+            r2.name,
+            r2.name_zh
+        FROM
+            `user_role_rel` AS r1
+            LEFT JOIN `role` AS r2 ON r1.role_id = r2.id
+        WHERE
+            r1.user_id = '${id}'
+    </select>
+
+    <select id="getUserInfo" resultMap="userInfoMap">
+        SELECT
+            u.id,
+            username,
+            email,
+            enabled,
+            account_locked,
+            account_expired,
+            credentials_expired,
+            introduction,
+            sex,
+            create_time,
+            recently_time,
+            province,
+            birth
+        FROM
+            `user` AS u
+            LEFT JOIN `user_info` AS ui ON u.id = ui.user_id
+        WHERE
+            <if test="flag != null and flag == 1">
+                u.username = '${content}'
+            </if>
+            <if test="flag != null and flag == 2">
+                u.email = '${content}'
+            </if>
+            <if test="flag != null and flag == 3">
+                u.phone_num = '${content}'
+            </if>
+    </select>
+
+</mapper>
