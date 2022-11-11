@@ -1,5 +1,12 @@
-package com.jason.common.exception;/**
+package com.jason.common.exception;
+
+/**
  * @author：yangwushuo
- * @time：2022/11/10  16:15
- */public class DelException {
+ * @time：2022/11/10 16:15
+ */
+public class DelException extends RuntimeException{
+
+    public DelException(String message) {
+        super(message);
+    }
 }

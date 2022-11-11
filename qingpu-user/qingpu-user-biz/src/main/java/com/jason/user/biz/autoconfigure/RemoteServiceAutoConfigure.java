@@ -1,6 +1,6 @@
-package com.qingpu.user.api.autoconfigure;
+package com.jason.user.biz.autoconfigure;
 
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author：yangwushuo
  * @time：2022/10/26 10:30
  */
-@EnableFeignClients("com.qingpu.user.api")
-@ComponentScan("com.qingpu.user.api")
+@ComponentScan("com.jason.user.biz")
+@MapperScan({"com.jason.user.biz.mapper"})
 public class RemoteServiceAutoConfigure {
 }

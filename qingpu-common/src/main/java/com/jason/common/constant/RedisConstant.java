@@ -1,4 +1,4 @@
-package com.jason.auth.constant;
+package com.jason.common.constant;
 
 /**
  * Redis常量

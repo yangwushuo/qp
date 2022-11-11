@@ -1,6 +1,6 @@
 package com.jason.auth.controller;
 
-import com.jason.auth.domain.dto.Oauth2TokenDto;
+import com.jason.auth.domain.dto.TokenDto;
 import com.jason.common.Result.CommonResult;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
@@ -22,11 +22,11 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("/oauth")
-public class AuthController {
+public class OAuthController {
 
   private final TokenEndpoint tokenEndpoint;
 
-  public AuthController(TokenEndpoint tokenEndpoint) {
+  public OAuthController(TokenEndpoint tokenEndpoint) {
     this.tokenEndpoint = tokenEndpoint;
   }
 
@@ -34,9 +34,9 @@ public class AuthController {
    * Oauth2登录认证
    */
   @PostMapping("/token")
-  public CommonResult<Oauth2TokenDto> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+  public CommonResult<TokenDto> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
     OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
-    Oauth2TokenDto oauth2TokenDto = Oauth2TokenDto.builder()
+    TokenDto oauth2TokenDto = TokenDto.builder()
         .token(Objects.requireNonNull(oAuth2AccessToken).getValue())
         .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
         .expiresIn(oAuth2AccessToken.getExpiresIn())

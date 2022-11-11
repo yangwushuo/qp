@@ -1,8 +1,7 @@
-package cn.gathub.auth.controller;
+package com.jason.auth.controller;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,9 +10,9 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
 
 /**
- * 获取RSA公钥接口
- *
- * @author Honghui [wanghonghui_work@163.com] 2021/3/16
+ * 自定义Oauth2获取令牌接口
+ * @author: yangwushuo
+ * @time: 2022/10/27 11:31
  */
 @RestController
 public class KeyPairController {

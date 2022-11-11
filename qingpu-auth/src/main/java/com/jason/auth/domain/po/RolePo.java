@@ -1,8 +1,9 @@
-package com.jason.auth.domain.dataobject;
+package com.jason.auth.domain.po;
 
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.Alias;
 
 /**
  * @author：yangwushuo
@@ -14,7 +15,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Accessors(chain = true)
-public class RoleDo {
+public class RolePo {
 
     private Long id;
 

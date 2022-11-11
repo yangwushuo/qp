@@ -1,30 +1,23 @@
-package cn.gathub.auth.service.principal;
+package com.jason.auth.service.principal;
 
+import com.jason.auth.constant.MessageConstant;
+import com.jason.auth.domain.dto.ClientDto;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import cn.gathub.auth.constant.MessageConstant;
-import cn.gathub.auth.domain.entity.Client;
-import lombok.Data;
+import java.util.*;
 
 /**
- * 登录用户信息
- *
- * @author Honghui [wanghonghui_work@163.com] 2021/3/19
+ * @author: yangwushuo
+ * @time: 2022/10/27 15:29
  */
 @Data
 public class ClientPrincipal implements ClientDetails {
 
-  private Client client;
+  private ClientDto client;
 
-  public ClientPrincipal(Client client) {
+  public ClientPrincipal(ClientDto client) {
     this.client = client;
   }
 

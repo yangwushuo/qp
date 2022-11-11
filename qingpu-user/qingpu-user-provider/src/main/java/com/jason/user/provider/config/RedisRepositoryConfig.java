@@ -1,4 +1,4 @@
-package com.jason.gateway.config;
+package com.jason.user.provider.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,7 +1,7 @@
-package cn.gathub.gateway.filter;
+package com.jason.gateway.filter;
 
+import cn.hutool.core.util.StrUtil;
 import com.nimbusds.jose.JWSObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -10,16 +10,14 @@ import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 import java.text.ParseException;
 
-import cn.hutool.core.util.StrUtil;
-import reactor.core.publisher.Mono;
-
 /**
  * 将登录用户的JWT转化成用户信息的全局过滤器
- *
- * @author Honghui [wanghonghui_work@163.com] 2021/3/16
+ * @author: yangwushuo
+ * @time: 2022/10/26 21:57
  */
 @Component
 public class AuthGlobalFilter implements GlobalFilter, Ordered {

@@ -1,4 +1,4 @@
-package com.jason.user.biz.bo;
+package com.qingpu.user.api.response;
 
 import lombok.*;
 
@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class FollowBo {
+public class FollowResponse {
 
     private Long id;
 

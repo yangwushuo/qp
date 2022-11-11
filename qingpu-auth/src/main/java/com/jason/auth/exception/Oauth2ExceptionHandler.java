@@ -1,11 +1,12 @@
-package cn.gathub.auth.exception;
+package com.jason.auth.exception;
 
+
+import com.jason.common.Result.CommonResult;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import cn.gathub.auth.api.CommonResult;
 
 
 /**
@@ -15,9 +16,17 @@ import cn.gathub.auth.api.CommonResult;
  */
 @ControllerAdvice
 public class Oauth2ExceptionHandler {
+
   @ResponseBody
   @ExceptionHandler(value = OAuth2Exception.class)
   public CommonResult<String> handleOauth2(OAuth2Exception e) {
     return CommonResult.failed(e.getMessage());
   }
+
+  @ResponseBody
+  @ExceptionHandler(value = CaptchaException.class)
+  public CommonResult<String> handleCaptcha(CaptchaException e){
+    return CommonResult.failed(e.getMessage());
+  }
+
 }

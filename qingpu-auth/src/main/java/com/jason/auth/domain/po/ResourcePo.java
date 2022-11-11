@@ -3,6 +3,8 @@ package com.jason.auth.domain.po;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * @author：yangwushuo
  * @time：2022/10/30 14:14
@@ -13,10 +15,12 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Accessors(chain = true)
-public class Resource {
+public class ResourcePo {
 
     private Long id;
 
-    private String 
+    private String routeName;
+
+    private List<RolePo> rolePos;
 
 }

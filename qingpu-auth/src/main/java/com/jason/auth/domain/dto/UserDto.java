@@ -1,10 +1,8 @@
-package com.jason.auth.domain.entity;
+package com.jason.auth.domain.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -16,21 +14,28 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
+@Accessors(chain = true)
 @Builder(toBuilder = true)
-@TableName("user")
-public class User {
+@ToString
+public class UserDto {
 
-  @TableId(value = "id", type = IdType.AUTO)
   private Long id;
 
-  @TableField(value = "username")
   private String username;
 
-  @TableField(value = "password")
+  private String email;
+
   private String password;
 
-  @TableField(exist = false)
-  private Integer status;
+  private String phone;
 
-  private List<String> roles;
+  private Boolean enabled;
+
+  private Boolean accountExpired;
+
+  private Boolean accountLocked;
+
+  private Boolean credentialsExpired;
+
+  private List<RoleDto> roleDtos;
 }

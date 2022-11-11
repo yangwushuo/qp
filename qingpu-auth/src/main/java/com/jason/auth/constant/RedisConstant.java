@@ -1,9 +1,9 @@
-package cn.gathub.auth.constant;
+package com.jason.auth.constant;
 
 /**
  * Redis常量
- *
- * @author Honghui [wanghonghui_work@163.com] 2021/3/16
+ * @author: yangwushuo
+ * @time: 2022/10/27 11:30
  */
 public class RedisConstant {
 

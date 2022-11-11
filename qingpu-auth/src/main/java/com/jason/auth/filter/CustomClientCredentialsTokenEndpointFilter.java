@@ -7,6 +7,8 @@ import org.springframework.security.oauth2.provider.client.ClientCredentialsToke
  * @author：yangwushuo
  * @time：2022/10/30 11:43
  */
-public class CustomizeClientCredentialsTokenEndpointFilter extends ClientCredentialsTokenEndpointFilter {
+public class CustomClientCredentialsTokenEndpointFilter extends ClientCredentialsTokenEndpointFilter {
+
+
 
 }

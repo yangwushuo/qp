@@ -1,5 +1,6 @@
-package com.jason.auth.domain.dataobject;
+package com.jason.auth.domain.po;
 
+import com.jason.auth.domain.dto.RoleDto;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.type.Alias;
@@ -16,15 +17,27 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Accessors(chain = true)
-@Alias("userdo")
-public class UserDo {
+@Alias("userpo")
+public class UserPo{
 
     private Long id;
 
     private String username;
 
+    private String email;
+
+    private String phone;
+
     private String password;
 
-    private Integer status;
+    private Boolean enabled;
+
+    private Boolean accountExpired;
+
+    private Boolean accountLocked;
+
+    private Boolean credentialsExpired;
+
+    private List<RolePo> rolePos;
 
 }

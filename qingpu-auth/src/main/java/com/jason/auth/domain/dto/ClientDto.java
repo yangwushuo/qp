@@ -1,9 +1,7 @@
-package com.jason.auth.domain.po;
+package com.jason.auth.domain.dto;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-
-import java.util.List;
 
 /**
  * @author：yangwushuo
@@ -15,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Accessors(chain = true)
-public class ClientPo {
+public class ClientDto {
 
     private String clientId;
 
@@ -38,5 +36,9 @@ public class ClientPo {
     private String additionalInformation;
 
     private String autoapprove;
+
+    private Boolean secretRequire;
+
+    private Boolean scopeRequire;
 
 }

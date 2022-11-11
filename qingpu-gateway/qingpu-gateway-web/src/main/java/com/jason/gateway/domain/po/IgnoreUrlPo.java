@@ -16,6 +16,6 @@ public class IgnoreUrlPo {
 
     private Long id;
 
-    private String uri;
+    private String url;
 
 }

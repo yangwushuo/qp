@@ -1,4 +1,4 @@
-package com.jason.user.biz.po;
+package com.jason.user.biz.bo;
 
 import lombok.*;
 
@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class FollowPo {
+public class FollowBo {
 
     private Long id;
 

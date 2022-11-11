@@ -1,7 +1,8 @@
-package cn.gathub.gateway.constant;
+package com.jason.gateway.constant;
 
 /**
- * @author Honghui [wanghonghui_work@163.com] 2021/3/16
+ * @author: yangwushuo
+ * @time: 2022/10/26 22:00
  */
 public class AuthConstant {
 

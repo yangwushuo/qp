@@ -1,4 +1,4 @@
-package com.qingpu.user.api.config;
+package com.jason.user.provider.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.context.annotation.Bean;
@@ -18,14 +18,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-@EnableKnife4j
 public class SwaggerConfig {
     @Bean
     Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.qingpu.user.api.service"))
+                .apis(RequestHandlerSelectors.basePackage("com.jason.user.provider"))
                 .paths(PathSelectors.any())
                 .build();
     }

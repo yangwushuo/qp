@@ -1,9 +1,10 @@
-package cn.gathub.auth.service;
+package com.jason.auth.service;
 
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 
 /**
- * @author Honghui [wanghonghui_work@163.com] 2021/3/18
+ * @author: yangwushuo
+ * @time: 2022/10/27 15:28
  */
 public interface ClientService extends ClientDetailsService {
 

@@ -1,4 +1,4 @@
-package com.jason.user.biz.bo;
+package com.jason.user.biz.po;
 
 import lombok.*;
 
@@ -11,11 +11,19 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class AddAccountBo {
+public class AddAccountPo {
 
-    private String symbol;
+    private Long id;
+
+    private Integer symbol;
+
+    private String portraitImage;
 
     private String content;
+
+    private String username;
+
+    private Long createTime;
 
     private String password;
 

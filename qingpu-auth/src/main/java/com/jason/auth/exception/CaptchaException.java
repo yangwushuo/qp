@@ -1,5 +1,13 @@
-package com.jason.auth.exception;/**
+package com.jason.auth.exception;
+
+/**
  * @author：yangwushuo
- * @time：2022/11/5  19:19
- */public class CaptchaException {
+ * @time：2022/11/5 19:19
+ */
+public class CaptchaException extends RuntimeException {
+
+    public CaptchaException(String message) {
+        super(message);
+    }
+
 }

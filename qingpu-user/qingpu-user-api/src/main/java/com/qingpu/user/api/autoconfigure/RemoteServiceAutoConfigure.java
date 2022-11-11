@@ -1,4 +1,4 @@
-package com.qingpu.user.autoconfigure;
+package com.qingpu.user.api.autoconfigure;
 
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;

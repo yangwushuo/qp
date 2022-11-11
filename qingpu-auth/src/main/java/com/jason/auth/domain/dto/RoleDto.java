@@ -1,9 +1,5 @@
-package com.jason.auth.domain.entity;
+package com.jason.auth.domain.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
 /**
@@ -15,16 +11,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@TableName("role")
-public class Role {
+public class RoleDto {
 
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @TableField(value = "name")
     private String name;
 
-    @TableField(value = "name_zh")
     private String nameZH;
 
 }

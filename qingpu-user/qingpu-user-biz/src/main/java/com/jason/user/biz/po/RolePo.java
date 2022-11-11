@@ -1,4 +1,4 @@
-package com.jason.user.biz.bo;
+package com.jason.user.biz.po;
 
 import lombok.*;
 
@@ -11,5 +11,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class RoleBo {
+public class RolePo {
+
+    private Long id;
+
+    private String name;
+
+    private String nameZH;
+
 }

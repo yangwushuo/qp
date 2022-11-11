@@ -1,5 +1,14 @@
-package cn.gathub.auth.service.impl;
+package com.jason.auth.service.impl;
 
+
+import com.jason.auth.constant.MessageConstant;
+import com.jason.auth.dao.UserMapper;
+import com.jason.auth.domain.dto.UserDto;
+import com.jason.auth.domain.mapstruct.UserMapperStruct;
+import com.jason.auth.domain.po.UserPo;
+import com.jason.auth.service.UserService;
+import com.jason.auth.service.principal.UserPrincipal;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
@@ -9,48 +18,42 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-
-import cn.gathub.auth.constant.MessageConstant;
-import cn.gathub.auth.domain.entity.User;
-import cn.gathub.auth.service.UserService;
-import cn.gathub.auth.service.principal.UserPrincipal;
-import cn.hutool.core.collection.CollUtil;
-
 /**
  * 用户管理业务类
- *
- * @author Honghui [wanghonghui_work@163.com] 2021/3/16
+ * @author: yangwushuo
+ * @time: 2022/10/27 11:31
  */
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  private List<User> userList;
   private final PasswordEncoder passwordEncoder;
-
-  public UserServiceImpl(PasswordEncoder passwordEncoder) {
-    this.passwordEncoder = passwordEncoder;
-  }
-
-  @PostConstruct
-  public void initData() {
-    String password = passwordEncoder.encode("123456");
-    userList = new ArrayList<>();
-    userList.add(new User(1L, "admin", password, 1, CollUtil.toList("ADMIN")));
-    userList.add(new User(2L, "user", password, 1, CollUtil.toList("USER")));
-  }
+  private final UserMapper userMapper;
+  private final UserMapperStruct userMapperStruct;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    List<User> findUserList = userList.stream().filter(item -> item.getUsername().equals(username)).collect(Collectors.toList());
-    if (CollUtil.isEmpty(findUserList)) {
+
+    if(username.indexOf(":") == -1){
       throw new UsernameNotFoundException(MessageConstant.USERNAME_PASSWORD_ERROR);
     }
-    UserPrincipal userPrincipal = new UserPrincipal(findUserList.get(0));
+
+    String[] usernameSplit = username.split(":");
+    Integer flag = Integer.valueOf(usernameSplit[0]);
+    String content = usernameSplit[1];
+
+    //查询用户信息
+    UserPo userPo = userMapper.getUserInfo(flag, content);
+
+    UserDto userDto = userMapperStruct.userPo2UserDto(userPo);
+
+    if (userDto == null){
+      throw new UsernameNotFoundException(MessageConstant.USERNAME_PASSWORD_ERROR);
+    }
+
+    UserPrincipal userPrincipal = new UserPrincipal(userDto);
+
+    //判断账户
     if (!userPrincipal.isEnabled()) {
       throw new DisabledException(MessageConstant.ACCOUNT_DISABLED);
     } else if (!userPrincipal.isAccountNonLocked()) {
@@ -60,6 +63,7 @@ public class UserServiceImpl implements UserService {
     } else if (!userPrincipal.isCredentialsNonExpired()) {
       throw new CredentialsExpiredException(MessageConstant.CREDENTIALS_EXPIRED);
     }
+
     return userPrincipal;
   }
 

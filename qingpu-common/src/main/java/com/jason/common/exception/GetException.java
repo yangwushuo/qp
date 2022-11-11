@@ -1,4 +1,4 @@
-package com.jason.user.provider.exception;
+package com.jason.common.exception;
 
 /**
  * @author：yangwushuo

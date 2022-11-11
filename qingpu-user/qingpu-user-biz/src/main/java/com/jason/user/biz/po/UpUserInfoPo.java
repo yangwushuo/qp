@@ -1,4 +1,4 @@
-package com.jason.user.biz.bo;
+package com.jason.user.biz.po;
 
 import lombok.*;
 
@@ -11,13 +11,13 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class UpUserInfoBo {
-
-    private Long id;
+public class UpUserInfoPo {
 
     private String username;
 
     private String email;
+
+    private String portraitImage;
 
     private String sex;
 

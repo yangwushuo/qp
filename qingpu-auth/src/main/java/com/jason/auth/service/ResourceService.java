@@ -1,7 +1,8 @@
-package cn.gathub.auth.service;
+package com.jason.auth.service;
 
 /**
- * @author Honghui [wanghonghui_work@163.com] 2021/3/18
+ * @author: yangwushuo
+ * @time: 2022/10/27 11:32
  */
 public interface ResourceService {
 

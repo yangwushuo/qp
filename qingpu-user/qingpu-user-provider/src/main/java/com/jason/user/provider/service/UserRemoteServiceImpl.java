@@ -1,47 +1,135 @@
-package com.jason.provider.service;
+package com.jason.user.provider.service;
 
-import com.cxytiandi.kittycloud.common.base.Response;
-import com.cxytiandi.kittycloud.common.base.ResponseData;
-import com.cxytiandi.kittycloud.common.constant.DubboConstant;
-import com.cxytiandi.kittycloud.user.api.request.UserLoginRequest;
-import com.cxytiandi.kittycloud.user.api.response.UserResponse;
-import com.cxytiandi.kittycloud.user.api.service.UserRemoteService;
-import com.cxytiandi.kittycloud.user.biz.bo.UserBO;
-import com.cxytiandi.kittycloud.user.biz.service.UserService;
-import com.cxytiandi.kittycloud.user.provider.convert.UserResponseConvert;
-import org.apache.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.jason.common.Result.CommonResult;
+import com.jason.common.entity.HeaderUserInfo;
+import com.jason.common.util.JsonToObject;
+import com.jason.user.biz.bo.AddAccountBo;
+import com.jason.user.biz.bo.FollowBo;
+import com.jason.user.biz.bo.UpUserInfoBo;
+import com.jason.user.biz.bo.UserInfoBo;
+import com.jason.user.biz.service.OssService;
+import com.jason.user.biz.service.UserService;
+import com.jason.user.provider.mapstruct.ResponseMapStruct;
+import com.qingpu.user.api.request.AddAccountRequest;
+import com.qingpu.user.api.request.UpUserInfoRequest;
+import com.qingpu.user.api.response.FollowResponse;
+import com.qingpu.user.api.response.UserInfoResponse;
+import com.qingpu.user.api.service.UserRemoteService;
+import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-/**
- * 用户PRC/REST接口实现
- *
- * @作者 尹吉欢
- * @个人微信 jihuan900
- * @微信公众号 猿天地
- * @GitHub https://github.com/yinjihuan
- * @作者介绍 http://cxytiandi.com/about
- * @时间 2020-02-13 20:44:04
- */
-@Service(version = DubboConstant.VERSION_V100, group = DubboConstant.DEFAULT_GROUP, timeout = 3000)
+import java.util.List;
+
 @RestController
+@Api(tags = "用户接口")
 public class UserRemoteServiceImpl implements UserRemoteService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private UserResponseConvert userResponseConvert;
+    private final ResponseMapStruct responseMapStruct;
 
-    @Override
-    public ResponseData<UserResponse> getUser(Long userId) {
-        UserBO user = userService.getUser(userId);
-        return Response.ok(userResponseConvert.convert(user));
+    private final OssService ossService;
+
+    public UserRemoteServiceImpl(UserService userService, ResponseMapStruct responseMapStruct, OssService ossService) {
+        this.userService = userService;
+        this.responseMapStruct = responseMapStruct;
+        this.ossService = ossService;
     }
 
     @Override
-    public ResponseData<String> login(UserLoginRequest loginRequest) {
-        return Response.ok(userService.login(loginRequest.getUsername(), loginRequest.getPass()));
+    @ApiOperation(value ="获取用户信息", notes = "ROLE:ADMIN,USER,BOSS")
+//    @ApiImplicitParam(paramType = "header", name = "userInfo", value = "头部用户信息", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<UserInfoResponse> getUserInfo(String userInfo) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        UserInfoBo userInfoBo = userService.getUserInfo(headerUserInfo.getId());
+        return CommonResult.success(responseMapStruct.userInfoBo2UserInfoResponse(userInfoBo));
     }
+
+    @Override
+    @ApiOperation(value ="更新用户信息", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "body", name = "upUserInfoRequest", value = "更新用户请求体", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "更新成功"),
+            @ApiResponse(code = 500, message = "更新失败")
+    })
+    public CommonResult<String> upUserInfo(String userInfo, UpUserInfoRequest upUserInfoRequest) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        UpUserInfoBo upUserInfoBo = responseMapStruct.upUserInfoRequest2UpUserInfoBo(upUserInfoRequest);
+        userService.upUserInfo(headerUserInfo.getId(),upUserInfoBo);
+        return CommonResult.success("更新成功");
+    }
+
+    @Override
+    @ApiOperation(value ="上传用户头像", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "body", name = "file", value = "头像文件", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "上传成功"),
+            @ApiResponse(code = 500, message = "上床失败")
+    })
+    public CommonResult<String> upUserPortrait(String userInfo, MultipartFile file) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        userService.upUserPortrait(headerUserInfo.getId(), file);
+        return CommonResult.success("上传成功");
+    }
+
+    @Override
+    @ApiOperation(value ="创建账户", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "body", name = "addAccountRequest", value = "创建账户请求体", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "创建成功"),
+            @ApiResponse(code = 500, message = "创建失败")
+    })
+    public CommonResult<String> addAccount(AddAccountRequest addAccountRequest) {
+        AddAccountBo addAccountBo = responseMapStruct.addAccountRequest2AddAccountBo(addAccountRequest);
+        System.out.println(addAccountBo);
+        userService.addAccount(addAccountBo);
+        return CommonResult.success("创建成功");
+    }
+
+    @Override
+    @ApiOperation(value ="添加关注", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "fid", value = "关注id", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "关注成功"),
+            @ApiResponse(code = 500, message = "关注失败")
+    })
+    public CommonResult<String> addFollow(String userInfo, Long fid) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        userService.addFollow(headerUserInfo.getId(), fid);
+        return CommonResult.success("关注成功");
+    }
+
+    @Override
+    @ApiOperation(value ="获取关注列表", notes = "ROLE:ADMIN,USER,BOSS")
+//    @ApiImplicitParam(paramType = "query", name = "fid", value = "关注id", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<List<FollowResponse>> getFollow(String userInfo) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        List<FollowBo> followBos = userService.getFollow(headerUserInfo.getId());
+        List<FollowResponse> followResponses = responseMapStruct.followBoList2FollowResponseList(followBos);
+        return CommonResult.success(followResponses);
+    }
+
+    @Override
+    @ApiOperation(value ="取消关注", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "fid", value = "取消关注id", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "取消成功"),
+            @ApiResponse(code = 500, message = "取消失败")
+    })
+    public CommonResult<String> cancelFollow(String userInfo, Long fid) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        userService.cancelFollow(headerUserInfo.getId(), fid);
+        return CommonResult.success("取消成功");
+    }
+
 
 }

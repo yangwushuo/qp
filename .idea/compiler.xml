@@ -2,17 +2,51 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="qingpu-exchanges" />
+        <module name="qingpu-elasticsearch" />
         <module name="qingpu-common" />
       </profile>
+      <profile name="Annotation profile for qingpu" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.4.2.Final/mapstruct-processor-1.4.2.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.4.2.Final/mapstruct-1.4.2.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-mapstruct-binding/0.1.0/lombok-mapstruct-binding-0.1.0.jar" />
+        </processorPath>
+        <module name="qingpu-gateway-web" />
+        <module name="qingpu-user-biz" />
+        <module name="qingpu-user-provider" />
+        <module name="qingpu-auth" />
+        <module name="qingpu-user-api" />
+      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="qingpu-aliyun" target="1.8" />
+      <module name="qingpu-gateway-swagger2" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="qingpu-aliyun" options="-parameters" />
+      <module name="qingpu-auth" options="-parameters" />
       <module name="qingpu-common" options="-parameters" />
+      <module name="qingpu-elasticsearch" options="-parameters" />
+      <module name="qingpu-exchanges" options="-parameters" />
+      <module name="qingpu-gateway" options="" />
+      <module name="qingpu-gateway-swagger2" options="-parameters" />
+      <module name="qingpu-gateway-web" options="-parameters" />
+      <module name="qingpu-user" options="" />
+      <module name="qingpu-user-api" options="-parameters" />
+      <module name="qingpu-user-biz" options="-parameters" />
+      <module name="qingpu-user-provider" options="-parameters" />
     </option>
   </component>
 </project>

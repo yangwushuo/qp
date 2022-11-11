@@ -1,4 +1,4 @@
-package com.jason.auth.api;
+package com.jason.common.Result;
 
 /**
  * 封装API的错误码

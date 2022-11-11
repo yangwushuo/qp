@@ -1,4 +1,4 @@
-package com.jason.auth.api;
+package com.jason.common.Result;
 
 /**
  * 通用返回对象

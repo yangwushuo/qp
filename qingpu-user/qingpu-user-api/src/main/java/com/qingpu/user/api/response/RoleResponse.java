@@ -1,4 +1,4 @@
-package com.jason.user.biz.bo;
+package com.qingpu.user.api.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,8 +13,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-@ApiModel(value = "角色Bo", description = "角色信息描述")
-public class RoleBo {
+@ApiModel(value = "角色响应", description = "角色响应信息")
+public class RoleResponse {
 
     @ApiModelProperty("英文角色名")
     private String name;

@@ -1,5 +1,6 @@
-package com.jason.auth.domain.po;
+package com.jason.auth.domain.dto;
 
+import com.jason.auth.domain.po.RolePo;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -15,12 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Accessors(chain = true)
-public class ResourcePo {
+public class ResourceDto {
 
     private Long id;
 
     private String routeName;
 
-    private List<RolePo> rolePos;
+    private List<RoleDto> roleDtos;
 
 }

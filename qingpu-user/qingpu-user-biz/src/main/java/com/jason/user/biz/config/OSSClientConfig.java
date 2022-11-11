@@ -1,7 +1,9 @@
-package com.jason.user.provider.config;
+package com.jason.user.biz.config;
 
 import com.aliyun.oss.OSSClient;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
  * @time：2022/11/4 11:03
  */
 @Configuration
+@RefreshScope
+@Data
 public class OSSClientConfig {
 
     //阿里云API的内或外网域名
@@ -22,10 +26,10 @@ public class OSSClientConfig {
     //阿里云API的密钥Access Key Secret
     @Value("${aliyun.oss.access-key-secret}")
     private String accessKeySecret;
-    //阿里云API的bucket名称
-    @Value("${aliyun.oss.bucket-name}")
-    private String bucketName;
-    //阿里云API的文件夹名称
+
+    @Value("${aliyun.oss.bucket}")
+    private String bucket;
+
     @Value("${aliyun.oss.folder}")
     private String folder;
 

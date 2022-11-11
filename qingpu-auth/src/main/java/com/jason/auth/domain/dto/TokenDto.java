@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder
-public class Oauth2TokenDto {
+public class TokenDto {
   /**
    * 访问令牌
    */

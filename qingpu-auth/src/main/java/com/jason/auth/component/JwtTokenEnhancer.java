@@ -1,5 +1,6 @@
-package cn.gathub.auth.component;
+package com.jason.auth.component;
 
+import com.jason.auth.service.principal.UserPrincipal;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -9,13 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.gathub.auth.service.principal.UserPrincipal;
-
 
 /**
  * JWT内容增强器
- *
- * @author Honghui [wanghonghui_work@163.com] 2021/3/16
+ * @author: yangwushuo
+ * @time: 2022/10/27 11:29
  */
 @Component
 public class JwtTokenEnhancer implements TokenEnhancer {
