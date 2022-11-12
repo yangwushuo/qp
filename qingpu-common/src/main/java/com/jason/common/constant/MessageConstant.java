@@ -16,4 +16,5 @@ public class MessageConstant {
   public static final String ACCOUNT_EXPIRED = "该账号已过期，请联系管理员!";
   public static final String PERMISSION_DENIED = "没有访问权限，请联系管理员!";
   public static final String NOT_FOUND_CLIENT = "未找到客户端!";
+
 }

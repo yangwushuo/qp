@@ -15,8 +15,6 @@ public class UpUserInfoBo {
 
     private String username;
 
-    private String email;
-
     private String portraitImage;
 
     private String sex;

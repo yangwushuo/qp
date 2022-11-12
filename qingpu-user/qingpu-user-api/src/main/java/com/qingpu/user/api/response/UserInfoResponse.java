@@ -1,6 +1,5 @@
 package com.qingpu.user.api.response;
 
-import com.jason.user.biz.bo.RoleBo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -27,6 +26,9 @@ public class UserInfoResponse {
 
     @ApiModelProperty("邮箱")
     private String email;
+
+    @ApiModelProperty("手机")
+    private String phone;
 
     @ApiModelProperty("启用")
     private Boolean enabled;

@@ -86,7 +86,6 @@ public class UserRemoteServiceImpl implements UserRemoteService {
     })
     public CommonResult<String> addAccount(AddAccountRequest addAccountRequest) {
         AddAccountBo addAccountBo = responseMapStruct.addAccountRequest2AddAccountBo(addAccountRequest);
-        System.out.println(addAccountBo);
         userService.addAccount(addAccountBo);
         return CommonResult.success("创建成功");
     }
@@ -129,6 +128,22 @@ public class UserRemoteServiceImpl implements UserRemoteService {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
         userService.cancelFollow(headerUserInfo.getId(), fid);
         return CommonResult.success("取消成功");
+    }
+
+    @Override
+    @ApiOperation(value ="更新手机号", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParams({
+        @ApiImplicitParam(paramType = "query", name = "phone", value = "手机号", required = true),
+        @ApiImplicitParam(paramType = "query", name = "captcha", value = "验证码", required = true)
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "更新成功"),
+            @ApiResponse(code = 500, message = "更新失败")
+    })
+    public CommonResult<String> getPhone(String userInfo, String phone, String captcha) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        userService.upPhone(headerUserInfo.getId(), phone, captcha);
+        return CommonResult.success("更新成功");
     }
 
 

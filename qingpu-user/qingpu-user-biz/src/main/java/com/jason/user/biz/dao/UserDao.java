@@ -40,5 +40,6 @@ public interface UserDao {
 
     void delFollow(Long uid, Long fid);
 
+    void upPhone(Long uid, String phone);
 
 }

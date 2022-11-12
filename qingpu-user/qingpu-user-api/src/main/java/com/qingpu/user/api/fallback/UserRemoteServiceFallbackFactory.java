@@ -1,8 +1,6 @@
 package com.qingpu.user.api.fallback;
 
 import com.jason.common.Result.CommonResult;
-import com.jason.common.entity.HeaderUserInfo;
-import com.jason.user.biz.bo.UserInfoBo;
 import com.qingpu.user.api.request.AddAccountRequest;
 import com.qingpu.user.api.request.UpUserInfoRequest;
 import com.qingpu.user.api.response.FollowResponse;
@@ -57,6 +55,11 @@ public class UserRemoteServiceFallbackFactory implements FallbackFactory<UserRem
             @Override
             public CommonResult<String> cancelFollow(String userInfo, Long fid) {
                 return CommonResult.failed("取消失败");
+            }
+
+            @Override
+            public CommonResult<String> getPhone(String userInfo, String phone, String captcha) {
+                return CommonResult.failed("更新失败");
             }
         };
     }

@@ -18,11 +18,6 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>com.jason</groupId>
-            <artifactId>qingpu-user-biz</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
 

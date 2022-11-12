@@ -19,9 +19,6 @@ public class UpUserInfoRequest {
     @ApiModelProperty("用户名")
     private String username;
 
-    @ApiModelProperty("邮箱")
-    private String email;
-
     @ApiModelProperty("性别")
     private String sex;
 

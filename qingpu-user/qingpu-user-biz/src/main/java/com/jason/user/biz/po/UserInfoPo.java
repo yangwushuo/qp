@@ -22,6 +22,8 @@ public class UserInfoPo {
 
     private String email;
 
+    private String phone;
+
     private Boolean enabled;
 
     private Boolean accountExpired;

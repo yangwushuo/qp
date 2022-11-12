@@ -6,6 +6,7 @@
         <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
         <result column="username" property="username" javaType="string" jdbcType="VARCHAR"/>
         <result column="email" property="email" javaType="string" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" javaType="string" jdbcType="VARCHAR"/>
         <result column="enabled" property="enabled" javaType="boolean" jdbcType="TINYINT"/>
         <result column="account_locked" property="accountLocked" javaType="boolean" jdbcType="TINYINT"/>
         <result column="account_expired" property="accountExpired" javaType="boolean" jdbcType="TINYINT"/>
@@ -43,6 +44,7 @@
             u.id,
             username,
             email,
+            phone,
             enabled,
             account_locked,
             account_expired,
@@ -85,9 +87,6 @@
         SET
             <if test="uui.username != null">
                 u1.`username` = '${uui.username}',
-            </if>
-            <if test="uui.email != null">
-                u1.`email` = '${uui.email}',
             </if>
             <if test="uui.portraitImage != null">
                 u2.`portrait_image` = '${uui.portraitImage}',
@@ -181,6 +180,14 @@
         WHERE `user_id` = '${uid}' AND `follow_user_id` = '${fid}';
     </delete>
 
+    <update id="upPhone">
+        UPDATE
+            `user`
+        SET
+            `phone` = '${phone}'
+        WHERE
+            `id` = '${uid}'
+    </update>
 
 
 </mapper>

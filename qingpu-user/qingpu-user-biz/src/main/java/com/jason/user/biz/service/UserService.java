@@ -28,5 +28,7 @@ public interface UserService {
 
     void cancelFollow(Long uid, Long fid);
 
+    void upPhone(Long uid, String phone, String captcha);
+
 
 }

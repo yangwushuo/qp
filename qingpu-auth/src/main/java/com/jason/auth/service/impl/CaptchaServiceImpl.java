@@ -6,8 +6,10 @@ import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponseBody;
 import com.google.gson.Gson;
 import com.jason.auth.config.MailConfig;
+import com.jason.auth.exception.CaptchaException;
 import com.jason.auth.service.CaptchaService;
 import com.jason.common.util.RandUtil;
+import com.jason.common.util.VerifyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -50,8 +52,12 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
-    public Boolean sendEmailCaptcha(String email) {
-        Boolean res = false;
+    public void sendEmailCaptcha(String email, Integer symbol) {
+
+        if (email == null || email.length() <=0 || symbol == null || !VerifyUtil.verifyEmail(email)){
+            throw new CaptchaException("参数问题,发送失败");
+        }
+
         try {
             //获取MimeMessage对象
             MimeMessage message = javaMailSender.createMimeMessage();
@@ -75,7 +81,7 @@ public class CaptchaServiceImpl implements CaptchaService {
             Integer randomNumBySix = RandUtil.randomNumBySix();
 
             //保存一份到redis缓存中
-            redisTemplate.opsForValue().set("captcha".concat(email),randomNumBySix, 3, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(symbol.toString().concat("captcha").concat(email),randomNumBySix, 3, TimeUnit.MINUTES);
 
             map.put("captcha", randomNumBySix);
             context.setVariables(map);
@@ -85,16 +91,19 @@ public class CaptchaServiceImpl implements CaptchaService {
             //发送邮件
             javaMailSender.send(message);
             log.info("send mail to".concat(email).concat(" success"));
-            res = true;
         } catch (Exception e) {
             log.info("send failed to".concat(email).concat(" success"));
-            return res;
+            throw new CaptchaException("发送失败");
         }
-        return res;
     }
 
     @Override
-    public Boolean sendPhoneCaptcha(String phone) {
+    public void sendPhoneCaptcha(String phone, Integer symbol) {
+
+        if (phone == null || phone.length() <=0 || symbol == null || !VerifyUtil.verifyChinaPhoneNum(phone)){
+            throw new CaptchaException("参数问题,发送失败");
+        }
+
         Integer randomNumBySix = RandUtil.randomNumBySix();
         SendSmsRequest sendSmsRequest = SendSmsRequest.builder()
                 .signName("阿里云短信测试")
@@ -113,13 +122,12 @@ public class CaptchaServiceImpl implements CaptchaService {
             String code = body.getCode();
             if (code.equals("OK")){
                 //保存一份到redis
-                redisTemplate.opsForValue().set("captcha".concat(phone),randomNumBySix, 3, TimeUnit.MINUTES);
-                return true;
+                redisTemplate.opsForValue().set(symbol.toString().concat("captcha").concat(phone),randomNumBySix, 3, TimeUnit.MINUTES);
             }else{
-                return false;
+                throw new CaptchaException("发送失败");
             }
         }catch (Exception e){
-            return false;
+            throw new CaptchaException("发送失败");
         }
     }
 }

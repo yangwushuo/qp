@@ -85,10 +85,20 @@ public interface UserRemoteService {
      * @return CommonResult<String>
      * @Author yangwushuo
      * @Decription //TODO 取消关注
-     * @Date 16:04 2022/11//10
+     * @Date 16:04 2022/11/10
      * @Param
      **/
     @DeleteMapping("/user/cancel_follow")
     CommonResult<String> cancelFollow(@RequestHeader("user")String userInfo, @RequestParam("fid") Long fid);
+
+    /**
+     * @return CommonResult<String>
+     * @Author yangwushuo
+     * @Decription //TODO 更新手机号
+     * @Date 16:04 2022/11/10
+     * @Param
+     **/
+    @PutMapping("/user/up_phone")
+    CommonResult<String> getPhone(@RequestHeader("user")String userInfo, @RequestParam("phone") String phone, @RequestParam("captcha") String captcha);
 
 }

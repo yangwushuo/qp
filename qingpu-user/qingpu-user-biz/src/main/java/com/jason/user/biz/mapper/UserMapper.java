@@ -34,4 +34,7 @@ public interface UserMapper {
     List<FollowPo> getFollowByUserId(@Param("uid") Long uid, @Param("fid") Long fid);
 
     void delFollow(@Param("uid") Long uid, @Param("fid") Long fid);
+
+    void upPhone(@Param("uid") Long uid, @Param("phone") String phone);
+
 }

@@ -1,6 +1,7 @@
 package com.jason.user.biz.service.impl;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
+import com.jason.common.constant.CaptchaSymbol;
 import com.jason.common.exception.AddException;
 import com.jason.common.exception.DelException;
 import com.jason.common.exception.GetException;
@@ -112,7 +113,7 @@ public class UserServiceImpl implements UserService {
             //校验是否是手机号
             Boolean verRes = VerifyUtil.verifyChinaPhoneNum(addAccountBo.getContent());
             if (verRes){
-                String valueByKey = getValueByKey("captcha".concat(addAccountBo.getContent()));
+                String valueByKey = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
                 if (valueByKey.equalsIgnoreCase(addAccountBo.getCaptcha())){
                     Boolean addRes = addAccountToDB(addAccountBo);
                     if (!addRes){
@@ -128,7 +129,7 @@ public class UserServiceImpl implements UserService {
             //校验邮箱
             Boolean verRes = VerifyUtil.verifyEmail(addAccountBo.getContent());
             if (verRes){
-                String valueByKey = getValueByKey("captcha".concat(addAccountBo.getContent()));
+                String valueByKey = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
                 if (valueByKey.equalsIgnoreCase(addAccountBo.getCaptcha())){
                     Boolean addRes = addAccountToDB(addAccountBo);
                     if (!addRes){
@@ -194,6 +195,24 @@ public class UserServiceImpl implements UserService {
         }
 
         userDao.delFollow(uid, fid);
+
+    }
+
+    @Override
+    public void upPhone(Long uid, String phone, String captcha) {
+        if(phone == null || phone.length() <= 0 || !VerifyUtil.verifyChinaPhoneNum(phone)){
+            throw new UpException("更新失败");
+        }
+
+        UserInfoPo userInfoPo = userDao.getUserInfo(uid);
+
+        String key = CaptchaSymbol.upPhoneCaptchaSymbol.toString().concat("captcha").concat(userInfoPo.getPhone());
+        String captchaValue = getValueByKey(key);
+        if(!captchaValue.equalsIgnoreCase(captcha)){
+            throw new UpException("更新失败");
+        }
+
+        userDao.upPhone(uid, phone);
 
     }
 

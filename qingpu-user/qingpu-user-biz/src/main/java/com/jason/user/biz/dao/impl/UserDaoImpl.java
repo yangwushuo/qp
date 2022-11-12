@@ -75,4 +75,9 @@ public class UserDaoImpl implements UserDao {
         userMapper.delFollow(uid, fid);
     }
 
+    @Override
+    public void upPhone(Long uid, String phone) {
+        userMapper.upPhone(uid, phone);
+    }
+
 }
