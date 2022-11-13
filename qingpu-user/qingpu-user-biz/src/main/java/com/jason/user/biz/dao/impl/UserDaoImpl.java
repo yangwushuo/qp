@@ -80,4 +80,9 @@ public class UserDaoImpl implements UserDao {
         userMapper.upPhone(uid, phone);
     }
 
+    @Override
+    public String getUserPhoneById(Long uid) {
+        return userMapper.getUserPhoneById(uid);
+    }
+
 }

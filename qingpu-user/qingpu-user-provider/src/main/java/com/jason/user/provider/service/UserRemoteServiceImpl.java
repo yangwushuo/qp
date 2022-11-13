@@ -140,10 +140,26 @@ public class UserRemoteServiceImpl implements UserRemoteService {
             @ApiResponse(code = 200, message = "更新成功"),
             @ApiResponse(code = 500, message = "更新失败")
     })
-    public CommonResult<String> getPhone(String userInfo, String phone, String captcha) {
+    public CommonResult<String> upPhone(String userInfo, String phone, String captcha) {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
         userService.upPhone(headerUserInfo.getId(), phone, captcha);
         return CommonResult.success("更新成功");
+    }
+
+    @Override
+    @ApiOperation(value ="更新邮箱", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", required = true),
+            @ApiImplicitParam(paramType = "query", name = "captcha", value = "验证码", required = true)
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "更新成功"),
+            @ApiResponse(code = 500, message = "更新失败")
+    })
+    public CommonResult<String> upEmail(String userInfo, String email, String captcha) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+
+        return null;
     }
 
 

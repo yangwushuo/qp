@@ -113,11 +113,14 @@ public class UserServiceImpl implements UserService {
             //校验是否是手机号
             Boolean verRes = VerifyUtil.verifyChinaPhoneNum(addAccountBo.getContent());
             if (verRes){
-                String valueByKey = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
-                if (valueByKey.equalsIgnoreCase(addAccountBo.getCaptcha())){
+                String captchaValue = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
+                if (captchaValue.equalsIgnoreCase(addAccountBo.getCaptcha())){
                     Boolean addRes = addAccountToDB(addAccountBo);
                     if (!addRes){
                         throw new AddException("创建账户失败");
+                    }else{
+                        //创建账户成功删除键值对
+                        redisTemplate.delete(captchaValue);
                     }
                 }else{
                     throw new AddException("创建账户失败");
@@ -129,11 +132,14 @@ public class UserServiceImpl implements UserService {
             //校验邮箱
             Boolean verRes = VerifyUtil.verifyEmail(addAccountBo.getContent());
             if (verRes){
-                String valueByKey = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
-                if (valueByKey.equalsIgnoreCase(addAccountBo.getCaptcha())){
+                String captchaValue = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
+                if (captchaValue.equalsIgnoreCase(addAccountBo.getCaptcha())){
                     Boolean addRes = addAccountToDB(addAccountBo);
                     if (!addRes){
                         throw new AddException("创建账户失败");
+                    }else{
+                        //创建账户成功删除键值对
+                        redisTemplate.delete(captchaValue);
                     }
                 }else{
                     throw new AddException("创建账户失败");
@@ -204,12 +210,14 @@ public class UserServiceImpl implements UserService {
             throw new UpException("更新失败");
         }
 
-        UserInfoPo userInfoPo = userDao.getUserInfo(uid);
-
-        String key = CaptchaSymbol.upPhoneCaptchaSymbol.toString().concat("captcha").concat(userInfoPo.getPhone());
+        String userPhone = userDao.getUserPhoneById(uid);
+        String key = CaptchaSymbol.upPhoneCaptchaSymbol.toString().concat("captcha").concat(userPhone);
         String captchaValue = getValueByKey(key);
         if(!captchaValue.equalsIgnoreCase(captcha)){
             throw new UpException("更新失败");
+        }else{
+            //比对成功清空键值对
+            redisTemplate.delete(key);
         }
 
         userDao.upPhone(uid, phone);

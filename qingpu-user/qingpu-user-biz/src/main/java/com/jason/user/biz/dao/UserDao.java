@@ -42,4 +42,6 @@ public interface UserDao {
 
     void upPhone(Long uid, String phone);
 
+    String getUserPhoneById(Long uid);
+
 }

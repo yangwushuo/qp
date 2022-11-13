@@ -99,6 +99,9 @@ public interface UserRemoteService {
      * @Param
      **/
     @PutMapping("/user/up_phone")
-    CommonResult<String> getPhone(@RequestHeader("user")String userInfo, @RequestParam("phone") String phone, @RequestParam("captcha") String captcha);
+    CommonResult<String> upPhone(@RequestHeader("user")String userInfo, @RequestParam("phone") String phone, @RequestParam("captcha") String captcha);
+
+    @PutMapping("/user/up_email")
+    CommonResult<String> upEmail(@RequestHeader("user")String userInfo, @RequestParam("email") String email, @RequestParam("captcha") String captcha);
 
 }

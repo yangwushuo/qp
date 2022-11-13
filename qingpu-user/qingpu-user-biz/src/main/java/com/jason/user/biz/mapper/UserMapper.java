@@ -37,4 +37,6 @@ public interface UserMapper {
 
     void upPhone(@Param("uid") Long uid, @Param("phone") String phone);
 
+    String getUserPhoneById(@Param("uid") Long uid);
+
 }

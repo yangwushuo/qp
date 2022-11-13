@@ -189,5 +189,14 @@
             `id` = '${uid}'
     </update>
 
+    <select id="getUserPhoneById" resultType="java.lang.String">
+        SELECT
+            `phone`
+        FROM
+            `user`
+        WHERE
+            `id` = '${uid}'
+    </select>
+
 
 </mapper>

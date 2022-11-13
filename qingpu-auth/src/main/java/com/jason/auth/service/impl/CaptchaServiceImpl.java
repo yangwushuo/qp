@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.jason.auth.config.MailConfig;
 import com.jason.auth.exception.CaptchaException;
 import com.jason.auth.service.CaptchaService;
+import com.jason.common.constant.CaptchaSymbol;
 import com.jason.common.util.RandUtil;
 import com.jason.common.util.VerifyUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,17 @@ public class CaptchaServiceImpl implements CaptchaService {
             throw new CaptchaException("参数问题,发送失败");
         }
 
+        //判断发送验证码类型
+        if (
+                !(symbol == CaptchaSymbol.addAccountCaptchaSymbol ||
+                        symbol == CaptchaSymbol.upPhoneCaptchaSymbol ||
+                        symbol == CaptchaSymbol.upEmailCaptchaSymbol)
+        ){
+            throw new CaptchaException("参数问题,发送失败");
+        }
+
+
+
         try {
             //获取MimeMessage对象
             MimeMessage message = javaMailSender.createMimeMessage();
@@ -101,6 +113,15 @@ public class CaptchaServiceImpl implements CaptchaService {
     public void sendPhoneCaptcha(String phone, Integer symbol) {
 
         if (phone == null || phone.length() <=0 || symbol == null || !VerifyUtil.verifyChinaPhoneNum(phone)){
+            throw new CaptchaException("参数问题,发送失败");
+        }
+
+        //判断发送验证码类型
+        if (
+                !(symbol == CaptchaSymbol.addAccountCaptchaSymbol ||
+                        symbol == CaptchaSymbol.upPhoneCaptchaSymbol ||
+                        symbol == CaptchaSymbol.upEmailCaptchaSymbol)
+        ){
             throw new CaptchaException("参数问题,发送失败");
         }
 

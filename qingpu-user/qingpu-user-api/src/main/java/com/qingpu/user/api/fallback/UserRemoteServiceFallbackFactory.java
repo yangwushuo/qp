@@ -58,7 +58,12 @@ public class UserRemoteServiceFallbackFactory implements FallbackFactory<UserRem
             }
 
             @Override
-            public CommonResult<String> getPhone(String userInfo, String phone, String captcha) {
+            public CommonResult<String> upPhone(String userInfo, String phone, String captcha) {
+                return CommonResult.failed("更新失败");
+            }
+
+            @Override
+            public CommonResult<String> upEmail(String userInfo, String email, String captcha) {
                 return CommonResult.failed("更新失败");
             }
         };
