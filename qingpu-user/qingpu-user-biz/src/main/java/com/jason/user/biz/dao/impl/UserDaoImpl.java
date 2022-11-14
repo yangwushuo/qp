@@ -81,8 +81,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void upEmail(Long uid, String email) {
+        userMapper.upEmail(uid, email);
+    }
+
+    @Override
     public String getUserPhoneById(Long uid) {
         return userMapper.getUserPhoneById(uid);
+    }
+
+    @Override
+    public String getUserEmailById(Long uid) {
+        return userMapper.getUserEmailById(uid);
     }
 
 }

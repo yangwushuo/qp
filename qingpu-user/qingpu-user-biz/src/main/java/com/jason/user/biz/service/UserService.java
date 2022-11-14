@@ -30,5 +30,10 @@ public interface UserService {
 
     void upPhone(Long uid, String phone, String captcha);
 
+    void upEmail(Long uid, String email, String captcha);
+
+    void sendCaptcha2Phone(Long uid, Integer symbol);
+
+    void sendCaptcha2Email(Long uid, Integer symbol);
 
 }

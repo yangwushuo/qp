@@ -42,6 +42,10 @@ public interface UserDao {
 
     void upPhone(Long uid, String phone);
 
+    void upEmail(Long uid, String email);
+
     String getUserPhoneById(Long uid);
+
+    String getUserEmailById(Long uid);
 
 }

@@ -66,6 +66,16 @@ public class UserRemoteServiceFallbackFactory implements FallbackFactory<UserRem
             public CommonResult<String> upEmail(String userInfo, String email, String captcha) {
                 return CommonResult.failed("更新失败");
             }
+
+            @Override
+            public CommonResult<String> sendPhoneCaptcha(String userInfo, Integer symbol) {
+                return CommonResult.failed("发送失败");
+            }
+
+            @Override
+            public CommonResult<String> sendEmailCaptcha(String userInfo, Integer symbol) {
+                return CommonResult.failed("发送失败");
+            }
         };
     }
 }

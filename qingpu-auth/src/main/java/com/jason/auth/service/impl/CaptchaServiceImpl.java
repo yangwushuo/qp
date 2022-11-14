@@ -1,30 +1,15 @@
 package com.jason.auth.service.impl;
 
-import com.aliyun.sdk.service.dysmsapi20170525.AsyncClient;
-import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsRequest;
-import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
-import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponseBody;
-import com.google.gson.Gson;
-import com.jason.auth.config.MailConfig;
 import com.jason.auth.exception.CaptchaException;
 import com.jason.auth.service.CaptchaService;
+import com.jason.common.Result.CommonResult;
 import com.jason.common.constant.CaptchaSymbol;
 import com.jason.common.util.RandUtil;
 import com.jason.common.util.VerifyUtil;
+import com.jason.cs.api.service.CommonServiceRemoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author：yangwushuo
@@ -36,119 +21,52 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private final JavaMailSender javaMailSender;
+    private final CommonServiceRemoteService commonServiceRemoteService;
 
-    private final TemplateEngine templateEngine;
-
-    private final MailConfig mailConfig;
-
-    private final AsyncClient asyncClient;
-
-    public CaptchaServiceImpl(RedisTemplate<String, Object> redisTemplate, JavaMailSender javaMailSender, TemplateEngine templateEngine, MailConfig mailConfig, AsyncClient asyncClient) {
+    public CaptchaServiceImpl(RedisTemplate<String, Object> redisTemplate, CommonServiceRemoteService commonServiceRemoteService) {
         this.redisTemplate = redisTemplate;
-        this.javaMailSender = javaMailSender;
-        this.templateEngine = templateEngine;
-        this.mailConfig = mailConfig;
-        this.asyncClient = asyncClient;
+        this.commonServiceRemoteService = commonServiceRemoteService;
     }
 
+
     @Override
-    public void sendEmailCaptcha(String email, Integer symbol) {
+    public void sendEmailCaptcha(String email) {
 
-        if (email == null || email.length() <=0 || symbol == null || !VerifyUtil.verifyEmail(email)){
+        if (email == null || email.length() <=0 || !VerifyUtil.verifyEmail(email)){
             throw new CaptchaException("参数问题,发送失败");
         }
 
-        //判断发送验证码类型
-        if (
-                !(symbol == CaptchaSymbol.addAccountCaptchaSymbol ||
-                        symbol == CaptchaSymbol.upPhoneCaptchaSymbol ||
-                        symbol == CaptchaSymbol.upEmailCaptchaSymbol)
-        ){
-            throw new CaptchaException("参数问题,发送失败");
-        }
+        //生成验证码
+        Integer randomNumBySix = RandUtil.randomNumBySix();
 
-
-
-        try {
-            //获取MimeMessage对象
-            MimeMessage message = javaMailSender.createMimeMessage();
-            //是否发送的邮件是富文本（附件，图片，html等）
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true);
-            mimeMessageHelper = new MimeMessageHelper(message, true);
-            //邮件发送人
-            mimeMessageHelper.setFrom(mailConfig.getFromEmail());
-            //邮件接收人,设置多个收件人地址
-            InternetAddress[] internetAddressTo = InternetAddress.parse(email);
-            mimeMessageHelper.setTo(internetAddressTo);
-            //messageHelper.setTo(to);
-            //邮件主题
-            mimeMessageHelper.setSubject("QingPu验证码");
-            //使用模板thymeleaf
-            //Context是导这个包import org.thymeleaf.context.Context;
-            Context context = new Context();
-            //定义模板数据
-            Map<String,Object> map = new HashMap<>();
-
-            Integer randomNumBySix = RandUtil.randomNumBySix();
-
-            //保存一份到redis缓存中
-            redisTemplate.opsForValue().set(symbol.toString().concat("captcha").concat(email),randomNumBySix, 3, TimeUnit.MINUTES);
-
-            map.put("captcha", randomNumBySix);
-            context.setVariables(map);
-            //获取thymeleaf的html模板
-            String emailContent = templateEngine.process("/emailCaptcha",context); //指定模板路径
-            mimeMessageHelper.setText(emailContent,true);
-            //发送邮件
-            javaMailSender.send(message);
-            log.info("send mail to".concat(email).concat(" success"));
-        } catch (Exception e) {
-            log.info("send failed to".concat(email).concat(" success"));
+        CommonResult<String> sendRes = commonServiceRemoteService.sendEmailCaptcha(email, randomNumBySix.toString());
+        if (sendRes.getCode() == 200){
+            //保存验证码到redis
+            String key = CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(email);
+            redisTemplate.opsForValue().set(key, randomNumBySix);
+        }else{
             throw new CaptchaException("发送失败");
         }
+
     }
 
     @Override
-    public void sendPhoneCaptcha(String phone, Integer symbol) {
+    public void sendPhoneCaptcha(String phone) {
 
-        if (phone == null || phone.length() <=0 || symbol == null || !VerifyUtil.verifyChinaPhoneNum(phone)){
-            throw new CaptchaException("参数问题,发送失败");
-        }
-
-        //判断发送验证码类型
-        if (
-                !(symbol == CaptchaSymbol.addAccountCaptchaSymbol ||
-                        symbol == CaptchaSymbol.upPhoneCaptchaSymbol ||
-                        symbol == CaptchaSymbol.upEmailCaptchaSymbol)
-        ){
+        if (phone == null || phone.length() <=0 || !VerifyUtil.verifyChinaPhoneNum(phone)){
             throw new CaptchaException("参数问题,发送失败");
         }
 
         Integer randomNumBySix = RandUtil.randomNumBySix();
-        SendSmsRequest sendSmsRequest = SendSmsRequest.builder()
-                .signName("阿里云短信测试")
-                .templateCode("SMS_154950909")
-                .phoneNumbers(phone)
-                .templateParam("{\"code\":\"".concat(randomNumBySix.toString()).concat("\"}"))
-                // Request-level configuration rewrite, can set Http request parameters, etc.
-                // .requestConfiguration(RequestConfiguration.create().setHttpHeaders(new HttpHeaders()))
-                .build();
-        CompletableFuture<SendSmsResponse> response = asyncClient.sendSms(sendSmsRequest);
-        // Synchronously get the return value of the API request
-        try {
-            SendSmsResponse sendSmsResponse = response.get();
-            log.info(new Gson().toJson(sendSmsResponse));
-            SendSmsResponseBody body = sendSmsResponse.getBody();
-            String code = body.getCode();
-            if (code.equals("OK")){
-                //保存一份到redis
-                redisTemplate.opsForValue().set(symbol.toString().concat("captcha").concat(phone),randomNumBySix, 3, TimeUnit.MINUTES);
-            }else{
-                throw new CaptchaException("发送失败");
-            }
-        }catch (Exception e){
+
+        CommonResult<String> sendRes = commonServiceRemoteService.sendPhoneCaptcha(phone, randomNumBySix.toString());
+        if (sendRes.getCode() == 200){
+            //保存验证码到redis
+            String key = CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(phone);
+            redisTemplate.opsForValue().set(key, randomNumBySix);
+        }else{
             throw new CaptchaException("发送失败");
         }
+
     }
 }

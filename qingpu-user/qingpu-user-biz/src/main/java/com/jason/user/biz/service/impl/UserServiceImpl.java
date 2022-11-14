@@ -1,6 +1,7 @@
 package com.jason.user.biz.service.impl;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
+import com.jason.common.Result.CommonResult;
 import com.jason.common.constant.CaptchaSymbol;
 import com.jason.common.exception.AddException;
 import com.jason.common.exception.DelException;
@@ -8,6 +9,7 @@ import com.jason.common.exception.GetException;
 import com.jason.common.exception.UpException;
 import com.jason.common.util.RandUtil;
 import com.jason.common.util.VerifyUtil;
+import com.jason.cs.api.service.CommonServiceRemoteService;
 import com.jason.user.biz.bo.AddAccountBo;
 import com.jason.user.biz.bo.FollowBo;
 import com.jason.user.biz.bo.UpUserInfoBo;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author：yangwushuo
@@ -44,12 +47,15 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserDao userDao, UserMapStruct userMapStruct, OssService ossService, RedisTemplate<String, Object> redisTemplate, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    private final CommonServiceRemoteService commonServiceRemoteService;
+
+    public UserServiceImpl(UserDao userDao, UserMapStruct userMapStruct, OssService ossService, RedisTemplate<String, Object> redisTemplate, BCryptPasswordEncoder bCryptPasswordEncoder, CommonServiceRemoteService commonServiceRemoteService) {
         this.userDao = userDao;
         this.userMapStruct = userMapStruct;
         this.ossService = ossService;
         this.redisTemplate = redisTemplate;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.commonServiceRemoteService = commonServiceRemoteService;
     }
 
     @Override
@@ -207,20 +213,86 @@ public class UserServiceImpl implements UserService {
     @Override
     public void upPhone(Long uid, String phone, String captcha) {
         if(phone == null || phone.length() <= 0 || !VerifyUtil.verifyChinaPhoneNum(phone)){
-            throw new UpException("更新失败");
+            throw new UpException("新手机号错误,更新失败");
         }
 
         String userPhone = userDao.getUserPhoneById(uid);
         String key = CaptchaSymbol.upPhoneCaptchaSymbol.toString().concat("captcha").concat(userPhone);
         String captchaValue = getValueByKey(key);
         if(!captchaValue.equalsIgnoreCase(captcha)){
-            throw new UpException("更新失败");
+            throw new UpException("验证码错误,更新失败");
         }else{
             //比对成功清空键值对
             redisTemplate.delete(key);
         }
 
         userDao.upPhone(uid, phone);
+
+    }
+
+    @Override
+    public void upEmail(Long uid, String email, String captcha) {
+        if(email == null || email.length() <= 0 || !VerifyUtil.verifyEmail(email)){
+            throw new UpException("新邮箱错误,更新失败");
+        }
+
+        String userEmail = userDao.getUserEmailById(uid);
+        String key = CaptchaSymbol.upEmailCaptchaSymbol.toString().concat("captcha").concat(userEmail);
+        String captchaValue = getValueByKey(key);
+        if(!captchaValue.equalsIgnoreCase(captcha)){
+            throw new UpException("验证码错误,更新失败");
+        }else{
+            //比对成功清空键值对
+            redisTemplate.delete(key);
+        }
+
+        userDao.upEmail(uid, email);
+    }
+
+    @Override
+    public void sendCaptcha2Phone(Long uid, Integer symbol) {
+
+        //判断标识是否存在
+        if (symbol != CaptchaSymbol.upPhoneCaptchaSymbol){
+            throw new GetException("发送失败");
+        }
+
+        String userPhone = userDao.getUserPhoneById(uid);
+        if (userPhone == null){
+            throw new GetException("请先")
+        }
+
+
+        Integer randomNumBySix = RandUtil.randomNumBySix();
+        CommonResult<String> sendRes = commonServiceRemoteService.sendPhoneCaptcha(userPhone, randomNumBySix.toString());
+        if (sendRes.getCode() == 200){
+            //保存一份到redis
+            String key = symbol.toString().concat("captcha").concat(userPhone);
+            redisTemplate.opsForValue().set(key, randomNumBySix, 3, TimeUnit.MINUTES);
+        }else{
+            throw new GetException("发送失败");
+        }
+
+    }
+
+    @Override
+    public void sendCaptcha2Email(Long uid, Integer symbol) {
+
+        //判断标识是否存在
+        if (symbol != CaptchaSymbol.upEmailCaptchaSymbol){
+            throw new GetException("发送失败");
+        }
+
+        String userEmail = userDao.getUserEmailById(uid);
+        Integer randomNumBySix = RandUtil.randomNumBySix();
+        CommonResult<String> sendRes = commonServiceRemoteService.sendEmailCaptcha(userEmail, randomNumBySix.toString());
+        if (sendRes.getCode() == 200){
+            //保存一份到redis
+            String key = symbol.toString().concat("captcha").concat(userEmail);
+            redisTemplate.opsForValue().set(key, randomNumBySix, 3, TimeUnit.MINUTES);
+        }else{
+            throw new GetException("发送失败");
+        }
 
     }
 

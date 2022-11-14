@@ -189,9 +189,27 @@
             `id` = '${uid}'
     </update>
 
+    <update id="upEmail">
+        UPDATE
+            `user`
+        SET
+            `email` = '${email}'
+        WHERE
+            `id` = '${uid}'
+    </update>
+
     <select id="getUserPhoneById" resultType="java.lang.String">
         SELECT
             `phone`
+        FROM
+            `user`
+        WHERE
+            `id` = '${uid}'
+    </select>
+
+    <select id="getUserEmailById" resultType="java.lang.String">
+        SELECT
+            `email`
         FROM
             `user`
         WHERE

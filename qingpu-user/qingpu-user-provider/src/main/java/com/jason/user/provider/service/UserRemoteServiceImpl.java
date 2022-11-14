@@ -158,8 +158,34 @@ public class UserRemoteServiceImpl implements UserRemoteService {
     })
     public CommonResult<String> upEmail(String userInfo, String email, String captcha) {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        userService.upEmail(headerUserInfo.getId(), email, captcha);
+        return CommonResult.success("更新成功");
+    }
 
-        return null;
+    @Override
+    @ApiOperation(value ="发送验证码到绑定的手机号", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "symbol", value = "验证码标识", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "发送成功"),
+            @ApiResponse(code = 500, message = "发送失败")
+    })
+    public CommonResult<String> sendPhoneCaptcha(String userInfo, Integer symbol) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        userService.sendCaptcha2Phone(headerUserInfo.getId(), symbol);
+        return CommonResult.success("发送成功");
+    }
+
+    @Override
+    @ApiOperation(value ="发送验证码到绑定的邮箱", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "symbol", value = "验证码标识", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "发送成功"),
+            @ApiResponse(code = 500, message = "发送失败")
+    })
+    public CommonResult<String> sendEmailCaptcha(String userInfo, Integer symbol) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        userService.sendCaptcha2Email(headerUserInfo.getId(), symbol);
+        return CommonResult.success("发送成功");
     }
 
 

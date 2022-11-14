@@ -15,6 +15,7 @@
         <module>qingpu-gateway</module>
         <module>qingpu-auth</module>
         <module>qingpu-elasticsearch</module>
+        <module>qingpu-common-service</module>
     </modules>
 
     <developers>

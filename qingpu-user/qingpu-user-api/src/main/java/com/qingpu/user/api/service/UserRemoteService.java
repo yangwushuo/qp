@@ -101,7 +101,35 @@ public interface UserRemoteService {
     @PutMapping("/user/up_phone")
     CommonResult<String> upPhone(@RequestHeader("user")String userInfo, @RequestParam("phone") String phone, @RequestParam("captcha") String captcha);
 
+    /**
+     * @return CommonResult<String>
+     * @Author yangwushuo
+     * @Decription //TODO 更新邮箱
+     * @Date 16:04 2022/11/10
+     * @Param
+     **/
     @PutMapping("/user/up_email")
     CommonResult<String> upEmail(@RequestHeader("user")String userInfo, @RequestParam("email") String email, @RequestParam("captcha") String captcha);
+
+    /**
+     * @return CommonResult<String>
+     * @Author yangwushuo
+     * @Decription //TODO 发送手机验证码到绑定的手机
+     * @Date 16:04 2022/11/10
+     * @Param
+     **/
+    @GetMapping("/user/send/phone/captcha")
+    CommonResult<String> sendPhoneCaptcha(@RequestHeader("user")String userInfo, @RequestParam("symbol") Integer symbol);
+
+    /**
+     * @return CommonResult<String>
+     * @Author yangwushuo
+     * @Decription //TODO 发送邮箱验证码到绑定的邮箱
+     * @Date 16:04 2022/11/10
+     * @Param
+     **/
+    @GetMapping("/user/send/email/captcha")
+    CommonResult<String> sendEmailCaptcha(@RequestHeader("user")String userInfo, @RequestParam("symbol") Integer symbol);
+
 
 }

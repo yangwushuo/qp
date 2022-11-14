@@ -7,7 +7,3 @@ spring:
         group: app-group
         name: qingpu-auth-dev
         file-extension: yml
-
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

@@ -7,9 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="qingpu-common-service-biz" />
         <module name="qingpu-exchanges" />
         <module name="qingpu-elasticsearch" />
+        <module name="qingpu-common-service-api" />
         <module name="qingpu-common" />
+        <module name="qingpu-common-service-provider" />
       </profile>
       <profile name="Annotation profile for qingpu" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -29,21 +32,23 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="qingpu-aliyun" target="1.8" />
       <module name="qingpu-gateway-swagger2" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="qingpu-aliyun" options="-parameters" />
       <module name="qingpu-auth" options="-parameters" />
       <module name="qingpu-common" options="-parameters" />
+      <module name="qingpu-common-service" options="-parameters" />
+      <module name="qingpu-common-service-api" options="-parameters" />
+      <module name="qingpu-common-service-biz" options="-parameters" />
+      <module name="qingpu-common-service-provider" options="-parameters" />
       <module name="qingpu-elasticsearch" options="-parameters" />
       <module name="qingpu-exchanges" options="-parameters" />
       <module name="qingpu-gateway" options="" />
       <module name="qingpu-gateway-swagger2" options="-parameters" />
       <module name="qingpu-gateway-web" options="-parameters" />
-      <module name="qingpu-user" options="" />
+      <module name="qingpu-user" options="-parameters" />
       <module name="qingpu-user-api" options="-parameters" />
       <module name="qingpu-user-biz" options="-parameters" />
       <module name="qingpu-user-provider" options="-parameters" />

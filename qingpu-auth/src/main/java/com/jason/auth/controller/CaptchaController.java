@@ -1,5 +1,6 @@
 package com.jason.auth.controller;
 
+import com.jason.cs.api.service.CommonServiceRemoteService;
 import com.jason.auth.service.CaptchaService;
 import com.jason.common.Result.CommonResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +23,14 @@ public class CaptchaController {
     }
 
     @GetMapping("/email")
-    CommonResult<String> getEmailCaptcha(@RequestParam("email") String email, @RequestParam("symbol") Integer symbol){
-        captchaService.sendEmailCaptcha(email, symbol);
+    CommonResult<String> getEmailCaptcha(@RequestParam("email") String email){
+        captchaService.sendEmailCaptcha(email);
         return CommonResult.success("验证码获取成功");
     }
 
     @GetMapping("/phone")
-    CommonResult<String> getPhoneCaptcha(@RequestParam("phone") String phone,  @RequestParam("symbol") Integer symbol){
-        captchaService.sendPhoneCaptcha(phone, symbol);
+    CommonResult<String> getPhoneCaptcha(@RequestParam("phone") String phone){
+        captchaService.sendPhoneCaptcha(phone);
         return CommonResult.success("验证码获取成功");
     }
 

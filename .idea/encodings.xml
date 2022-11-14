@@ -2,8 +2,12 @@
 <project version="4">
   <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-starter-parent/2.3.12.RELEASE/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/qingpu-aliyun/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-common-service/qingpu-common-service-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-common-service/qingpu-common-service-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-common-service/qingpu-common-service-provider/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-common-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-common-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-elasticsearch/src/main/java" charset="UTF-8" />
