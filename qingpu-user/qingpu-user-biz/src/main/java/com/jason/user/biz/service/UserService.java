@@ -1,9 +1,6 @@
 package com.jason.user.biz.service;
 
-import com.jason.user.biz.bo.AddAccountBo;
-import com.jason.user.biz.bo.FollowBo;
-import com.jason.user.biz.bo.UpUserInfoBo;
-import com.jason.user.biz.bo.UserInfoBo;
+import com.jason.user.biz.bo.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -28,12 +25,14 @@ public interface UserService {
 
     void cancelFollow(Long uid, Long fid);
 
-    void upPhone(Long uid, String phone, String captcha);
+    void upPhone(Long uid, UpPhoneAndEmailBo upPhoneAndEmailBo);
 
-    void upEmail(Long uid, String email, String captcha);
+    void upEmail(Long uid, UpPhoneAndEmailBo upPhoneAndEmailBo);
 
-    void sendCaptcha2Phone(Long uid, Integer symbol);
+    String sendCaptcha2Phone(Long uid);
 
-    void sendCaptcha2Email(Long uid, Integer symbol);
+    String sendCaptcha2Email(Long uid);
+
+    void verPassword(Long uid, VerPwdBo verPwdBo);
 
 }

@@ -43,4 +43,6 @@ public interface UserMapper {
 
     String getUserEmailById(@Param("uid") Long uid);
 
+    String getUserPasswordById(@Param("uid") Long uid);
+
 }

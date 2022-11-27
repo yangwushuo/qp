@@ -14,6 +14,8 @@ import com.jason.cs.biz.service.CaptchaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -51,6 +53,7 @@ public class CaptchaServiceImpl implements CaptchaService {
 
 
     @Override
+    @Async
     public void sendPhoneCaptcha(String phone, String captcha) {
 
         if (phone == null || phone.length() <=0 || !VerifyUtil.verifyChinaPhoneNum(phone)){
@@ -83,6 +86,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
+    @Async
     public void sendEmailCaptcha(String email, String captcha) {
         if (email == null || email.length() <=0 || !VerifyUtil.verifyEmail(email)){
             throw new GetException("参数问题,发送失败");

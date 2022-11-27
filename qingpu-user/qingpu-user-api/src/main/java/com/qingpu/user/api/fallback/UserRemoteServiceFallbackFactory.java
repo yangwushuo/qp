@@ -2,7 +2,9 @@ package com.qingpu.user.api.fallback;
 
 import com.jason.common.Result.CommonResult;
 import com.qingpu.user.api.request.AddAccountRequest;
+import com.qingpu.user.api.request.UpPhoneAndEmailRequest;
 import com.qingpu.user.api.request.UpUserInfoRequest;
+import com.qingpu.user.api.request.VerPwdRequest;
 import com.qingpu.user.api.response.FollowResponse;
 import com.qingpu.user.api.response.UserInfoResponse;
 import com.qingpu.user.api.service.UserRemoteService;
@@ -58,23 +60,33 @@ public class UserRemoteServiceFallbackFactory implements FallbackFactory<UserRem
             }
 
             @Override
-            public CommonResult<String> upPhone(String userInfo, String phone, String captcha) {
+            public CommonResult<String> upPhone(String userInfo, UpPhoneAndEmailRequest upPhoneAndEmailRequest) {
                 return CommonResult.failed("更新失败");
             }
 
             @Override
-            public CommonResult<String> upEmail(String userInfo, String email, String captcha) {
+            public CommonResult<String> upEmail(String userInfo, UpPhoneAndEmailRequest upPhoneAndEmailRequest) {
                 return CommonResult.failed("更新失败");
             }
 
             @Override
-            public CommonResult<String> sendPhoneCaptcha(String userInfo, Integer symbol) {
+            public CommonResult<String> sendPhoneCaptcha(String userInfo) {
                 return CommonResult.failed("发送失败");
             }
 
             @Override
-            public CommonResult<String> sendEmailCaptcha(String userInfo, Integer symbol) {
+            public CommonResult<String> sendEmailCaptcha(String userInfo) {
                 return CommonResult.failed("发送失败");
+            }
+
+            @Override
+            public CommonResult<String> verPassword(String userInfo, VerPwdRequest verPwdRequest) {
+                return CommonResult.failed("校验失败");
+            }
+
+            @Override
+            public CommonResult<String> getUserCoinExchangeAccount(String userInfo, Long exId) {
+                return CommonResult.failed("获取失败");
             }
         };
     }

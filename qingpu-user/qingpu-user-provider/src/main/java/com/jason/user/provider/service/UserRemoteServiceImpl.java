@@ -3,15 +3,20 @@ package com.jason.user.provider.service;
 import com.jason.common.Result.CommonResult;
 import com.jason.common.entity.HeaderUserInfo;
 import com.jason.common.util.JsonToObject;
+import com.jason.exchange.api.response.CoinExchangeAccountResponse;
+import com.jason.exchange.api.service.ExchangeRemoteService;
 import com.jason.user.biz.bo.AddAccountBo;
 import com.jason.user.biz.bo.FollowBo;
 import com.jason.user.biz.bo.UpUserInfoBo;
 import com.jason.user.biz.bo.UserInfoBo;
 import com.jason.user.biz.service.OssService;
 import com.jason.user.biz.service.UserService;
+import com.jason.user.provider.mapstruct.RequestMapStruct;
 import com.jason.user.provider.mapstruct.ResponseMapStruct;
 import com.qingpu.user.api.request.AddAccountRequest;
+import com.qingpu.user.api.request.UpPhoneAndEmailRequest;
 import com.qingpu.user.api.request.UpUserInfoRequest;
+import com.qingpu.user.api.request.VerPwdRequest;
 import com.qingpu.user.api.response.FollowResponse;
 import com.qingpu.user.api.response.UserInfoResponse;
 import com.qingpu.user.api.service.UserRemoteService;
@@ -22,19 +27,25 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@Api(tags = "用户接口")
+@Api(tags = "用户服务接口")
 public class UserRemoteServiceImpl implements UserRemoteService {
 
     private final UserService userService;
 
     private final ResponseMapStruct responseMapStruct;
 
+    private final RequestMapStruct requestMapStruct;
+
     private final OssService ossService;
 
-    public UserRemoteServiceImpl(UserService userService, ResponseMapStruct responseMapStruct, OssService ossService) {
+    private final ExchangeRemoteService exchangeRemoteService;
+
+    public UserRemoteServiceImpl(UserService userService, ResponseMapStruct responseMapStruct, RequestMapStruct requestMapStruct, OssService ossService, ExchangeRemoteService exchangeRemoteService) {
         this.userService = userService;
         this.responseMapStruct = responseMapStruct;
+        this.requestMapStruct = requestMapStruct;
         this.ossService = ossService;
+        this.exchangeRemoteService = exchangeRemoteService;
     }
 
     @Override
@@ -132,60 +143,75 @@ public class UserRemoteServiceImpl implements UserRemoteService {
 
     @Override
     @ApiOperation(value ="更新手机号", notes = "ROLE:ADMIN,USER,BOSS")
-    @ApiImplicitParams({
-        @ApiImplicitParam(paramType = "query", name = "phone", value = "手机号", required = true),
-        @ApiImplicitParam(paramType = "query", name = "captcha", value = "验证码", required = true)
-    })
+    @ApiImplicitParam(paramType = "body", name = "upPhoneAndEmailRequest", value = "更新手机邮箱请求体", required = true)
     @ApiResponses({
             @ApiResponse(code = 200, message = "更新成功"),
             @ApiResponse(code = 500, message = "更新失败")
     })
-    public CommonResult<String> upPhone(String userInfo, String phone, String captcha) {
+    public CommonResult<String> upPhone(String userInfo, UpPhoneAndEmailRequest upPhoneAndEmailRequest) {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
-        userService.upPhone(headerUserInfo.getId(), phone, captcha);
+        userService.upPhone(headerUserInfo.getId(), requestMapStruct.upPhoneAndEmailRequest2UpPhoneAndEmailBo(upPhoneAndEmailRequest));
         return CommonResult.success("更新成功");
     }
 
     @Override
     @ApiOperation(value ="更新邮箱", notes = "ROLE:ADMIN,USER,BOSS")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", required = true),
-            @ApiImplicitParam(paramType = "query", name = "captcha", value = "验证码", required = true)
-    })
+    @ApiImplicitParam(paramType = "body", name = "upPhoneAndEmailRequest", value = "更新手机邮箱请求体", required = true)
     @ApiResponses({
             @ApiResponse(code = 200, message = "更新成功"),
             @ApiResponse(code = 500, message = "更新失败")
     })
-    public CommonResult<String> upEmail(String userInfo, String email, String captcha) {
+    public CommonResult<String> upEmail(String userInfo, UpPhoneAndEmailRequest upPhoneAndEmailRequest) {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
-        userService.upEmail(headerUserInfo.getId(), email, captcha);
+        userService.upEmail(headerUserInfo.getId(), requestMapStruct.upPhoneAndEmailRequest2UpPhoneAndEmailBo(upPhoneAndEmailRequest));
         return CommonResult.success("更新成功");
     }
 
     @Override
     @ApiOperation(value ="发送验证码到绑定的手机号", notes = "ROLE:ADMIN,USER,BOSS")
-    @ApiImplicitParam(paramType = "query", name = "symbol", value = "验证码标识", required = true)
     @ApiResponses({
             @ApiResponse(code = 200, message = "发送成功"),
             @ApiResponse(code = 500, message = "发送失败")
     })
-    public CommonResult<String> sendPhoneCaptcha(String userInfo, Integer symbol) {
+    public CommonResult<String> sendPhoneCaptcha(String userInfo) {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
-        userService.sendCaptcha2Phone(headerUserInfo.getId(), symbol);
-        return CommonResult.success("发送成功");
+        return CommonResult.success(userService.sendCaptcha2Phone(headerUserInfo.getId()));
     }
 
     @Override
     @ApiOperation(value ="发送验证码到绑定的邮箱", notes = "ROLE:ADMIN,USER,BOSS")
-    @ApiImplicitParam(paramType = "query", name = "symbol", value = "验证码标识", required = true)
     @ApiResponses({
             @ApiResponse(code = 200, message = "发送成功"),
             @ApiResponse(code = 500, message = "发送失败")
     })
-    public CommonResult<String> sendEmailCaptcha(String userInfo, Integer symbol) {
+    public CommonResult<String> sendEmailCaptcha(String userInfo) {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
-        userService.sendCaptcha2Email(headerUserInfo.getId(), symbol);
-        return CommonResult.success("发送成功");
+        return CommonResult.success(userService.sendCaptcha2Email(headerUserInfo.getId()));
+    }
+
+    @Override
+    @ApiOperation(value ="校验密码", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "body", name = "verPwdRequest", value = "校验密码请求", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "校验成功"),
+            @ApiResponse(code = 500, message = "校验失败")
+    })
+    public CommonResult<String> verPassword(String userInfo, VerPwdRequest verPwdRequest) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        userService.verPassword(headerUserInfo.getId(), requestMapStruct.verPwdRequest2VerPwdBo(verPwdRequest));
+        return CommonResult.success("校验成功");
+    }
+
+    @Override
+    @ApiOperation(value ="获取用户交易所账号", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "exId", value = "交易所id", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<?> getUserCoinExchangeAccount(String userInfo, Long exId) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        return exchangeRemoteService.getUserCoinExchangeAccount(headerUserInfo.getId(), exId);
     }
 
 

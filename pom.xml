@@ -11,11 +11,13 @@
     <modules>
         <module>qingpu-common</module>
         <module>qingpu-user</module>
-        <module>qingpu-exchanges</module>
+        <module>qingpu-exchange</module>
         <module>qingpu-gateway</module>
         <module>qingpu-auth</module>
         <module>qingpu-elasticsearch</module>
         <module>qingpu-common-service</module>
+        <module>qingpu-binance</module>
+        <module>qingpu-binance/qingpu-binance-biz</module>
     </modules>
 
     <developers>

@@ -31,8 +31,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("API测试文档")
-                .description("QingPu项目的接口测试文档")
+                .title("API文档")
+                .description("QingPu项目交易所服务的接口测试文档")
                 .termsOfServiceUrl("http://www.qingpu.com")
                 .version("1.0")
                 .contact(new Contact("yangwushuo",

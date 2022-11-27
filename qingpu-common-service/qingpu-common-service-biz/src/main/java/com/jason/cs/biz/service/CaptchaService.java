@@ -1,5 +1,7 @@
 package com.jason.cs.biz.service;
 
+import org.springframework.scheduling.annotation.Async;
+
 /**
  * @author yangwushuo
  * @time 2022/11/13 19:48

@@ -3,6 +3,11 @@
   <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-starter-parent/2.3.12.RELEASE/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-binance/qingpu-binance-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-binance/qingpu-binance-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-binance/qingpu-binance-provider/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-binance/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-binance/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-common-service/qingpu-common-service-api/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-common-service/qingpu-common-service-biz/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-common-service/qingpu-common-service-provider/src/main/java" charset="UTF-8" />
@@ -12,8 +17,11 @@
     <file url="file://$PROJECT_DIR$/qingpu-common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-elasticsearch/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-elasticsearch/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/qingpu-exchanges/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/qingpu-exchanges/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-exchange/qingpu-exchange-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-exchange/qingpu-exchange-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-exchange/qingpu-exchange-provider/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-exchange/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qingpu-exchange/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-gateway/qingpu-gateway-swagger2/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-gateway/qingpu-gateway-web/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/qingpu-gateway/src/main/java" charset="UTF-8" />

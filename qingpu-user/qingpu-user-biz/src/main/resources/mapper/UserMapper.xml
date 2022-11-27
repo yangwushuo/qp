@@ -216,5 +216,14 @@
             `id` = '${uid}'
     </select>
 
+    <select id="getUserPasswordById" resultType="java.lang.String">
+        SELECT
+            `password`
+        FROM
+            `user`
+        WHERE
+            `id` = '${uid}'
+    </select>
+
 
 </mapper>

@@ -24,14 +24,12 @@ public class CaptchaController {
 
     @GetMapping("/email")
     CommonResult<String> getEmailCaptcha(@RequestParam("email") String email){
-        captchaService.sendEmailCaptcha(email);
-        return CommonResult.success("验证码获取成功");
+        return CommonResult.success(captchaService.sendEmailCaptcha(email));
     }
 
     @GetMapping("/phone")
     CommonResult<String> getPhoneCaptcha(@RequestParam("phone") String phone){
-        captchaService.sendPhoneCaptcha(phone);
-        return CommonResult.success("验证码获取成功");
+        return CommonResult.success(captchaService.sendPhoneCaptcha(phone));
     }
 
 }

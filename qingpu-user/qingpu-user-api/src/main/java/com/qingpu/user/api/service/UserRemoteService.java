@@ -3,7 +3,9 @@ package com.qingpu.user.api.service;
 import com.jason.common.Result.CommonResult;
 import com.qingpu.user.api.fallback.UserRemoteServiceFallbackFactory;
 import com.qingpu.user.api.request.AddAccountRequest;
+import com.qingpu.user.api.request.UpPhoneAndEmailRequest;
 import com.qingpu.user.api.request.UpUserInfoRequest;
+import com.qingpu.user.api.request.VerPwdRequest;
 import com.qingpu.user.api.response.FollowResponse;
 import com.qingpu.user.api.response.UserInfoResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -99,7 +101,7 @@ public interface UserRemoteService {
      * @Param
      **/
     @PutMapping("/user/up_phone")
-    CommonResult<String> upPhone(@RequestHeader("user")String userInfo, @RequestParam("phone") String phone, @RequestParam("captcha") String captcha);
+    CommonResult<String> upPhone(@RequestHeader("user")String userInfo, @RequestBody UpPhoneAndEmailRequest upPhoneAndEmailRequest);
 
     /**
      * @return CommonResult<String>
@@ -109,7 +111,7 @@ public interface UserRemoteService {
      * @Param
      **/
     @PutMapping("/user/up_email")
-    CommonResult<String> upEmail(@RequestHeader("user")String userInfo, @RequestParam("email") String email, @RequestParam("captcha") String captcha);
+    CommonResult<String> upEmail(@RequestHeader("user")String userInfo, @RequestBody UpPhoneAndEmailRequest upPhoneAndEmailRequest);
 
     /**
      * @return CommonResult<String>
@@ -119,7 +121,7 @@ public interface UserRemoteService {
      * @Param
      **/
     @GetMapping("/user/send/phone/captcha")
-    CommonResult<String> sendPhoneCaptcha(@RequestHeader("user")String userInfo, @RequestParam("symbol") Integer symbol);
+    CommonResult<String> sendPhoneCaptcha(@RequestHeader("user")String userInfo);
 
     /**
      * @return CommonResult<String>
@@ -129,7 +131,30 @@ public interface UserRemoteService {
      * @Param
      **/
     @GetMapping("/user/send/email/captcha")
-    CommonResult<String> sendEmailCaptcha(@RequestHeader("user")String userInfo, @RequestParam("symbol") Integer symbol);
+    CommonResult<String> sendEmailCaptcha(@RequestHeader("user")String userInfo);
+
+    /**
+     * @Author yangwushuo
+     * @Description //TODO
+     * @Date 22:48 2022/11/14
+     * @Param
+     * @return
+     **/
+    @PostMapping("/user/ver_password")
+    CommonResult<String> verPassword(@RequestHeader("user")String userInfo, @RequestBody VerPwdRequest verPwdRequest);
+
+    /**
+     * @return a
+     * @Author yangwushuo
+     * @Decription //TODO 用户交易所账号信息
+     * @Date 15:52 2022/11/18
+     * @Param
+     **/
+    @GetMapping("/user/ex/acc/coin")
+    CommonResult<?> getUserCoinExchangeAccount(
+            @RequestHeader("user")String userInfo,
+            @RequestParam(value = "exId", required = false) Long exId
+    );
 
 
 }

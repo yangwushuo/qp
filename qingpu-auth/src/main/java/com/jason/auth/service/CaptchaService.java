@@ -14,7 +14,7 @@ public interface CaptchaService {
      * @Date 19:28 2022/11/5
     * @Param
      **/
-    void sendEmailCaptcha(String email);
+    String sendEmailCaptcha(String email);
 
     /**
      * @return a
@@ -23,6 +23,6 @@ public interface CaptchaService {
      * @Date 19:28 2022/11/5
      * @Param
      **/
-    void sendPhoneCaptcha(String phone);
+    String sendPhoneCaptcha(String phone);
 
 }

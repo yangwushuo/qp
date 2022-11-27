@@ -2,19 +2,16 @@ package com.jason.user.provider.exception;
 
 
 import com.jason.common.Result.CommonResult;
-import com.jason.common.exception.AddException;
-import com.jason.common.exception.DelException;
-import com.jason.common.exception.GetException;
-import com.jason.common.exception.UpException;
+import com.jason.common.exception.*;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
- * 全局处理Oauth2抛出的异常
- *
- * @author Honghui [wanghonghui_work@163.com] 2021/3/16
+ * 处理全局异常
+ * @author: yangwushuo
+ * @time: 2022/11/17 21:05
  */
 @ControllerAdvice
 public class CustomerExceptionHandler {
@@ -24,7 +21,8 @@ public class CustomerExceptionHandler {
           AddException.class,
           UpException.class,
           GetException.class,
-          DelException.class
+          DelException.class,
+          VerException.class
   })
   public CommonResult<String> handerException(Exception e) {
     return CommonResult.failed(e.getMessage());

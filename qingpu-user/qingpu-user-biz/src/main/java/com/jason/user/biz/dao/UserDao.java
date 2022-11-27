@@ -48,4 +48,6 @@ public interface UserDao {
 
     String getUserEmailById(Long uid);
 
+    String getUserPasswordById(Long uid);
+
 }

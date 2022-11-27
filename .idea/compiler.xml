@@ -8,9 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="qingpu-common-service-biz" />
-        <module name="qingpu-exchanges" />
-        <module name="qingpu-elasticsearch" />
         <module name="qingpu-common-service-api" />
+        <module name="qingpu-elasticsearch" />
         <module name="qingpu-common" />
         <module name="qingpu-common-service-provider" />
       </profile>
@@ -25,10 +24,16 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-mapstruct-binding/0.1.0/lombok-mapstruct-binding-0.1.0.jar" />
         </processorPath>
         <module name="qingpu-gateway-web" />
+        <module name="qingpu-exchange-provider" />
         <module name="qingpu-user-biz" />
-        <module name="qingpu-user-provider" />
+        <module name="qingpu-exchange-biz" />
+        <module name="qingpu-binance-provider" />
         <module name="qingpu-auth" />
+        <module name="qingpu-exchange-api" />
         <module name="qingpu-user-api" />
+        <module name="qingpu-binance-biz" />
+        <module name="qingpu-user-provider" />
+        <module name="qingpu-binance-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -38,17 +43,24 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="qingpu-auth" options="-parameters" />
+      <module name="qingpu-binance" options="-parameters" />
+      <module name="qingpu-binance-api" options="-parameters" />
+      <module name="qingpu-binance-biz" options="-parameters" />
+      <module name="qingpu-binance-provider" options="-parameters" />
       <module name="qingpu-common" options="-parameters" />
       <module name="qingpu-common-service" options="-parameters" />
       <module name="qingpu-common-service-api" options="-parameters" />
       <module name="qingpu-common-service-biz" options="-parameters" />
       <module name="qingpu-common-service-provider" options="-parameters" />
       <module name="qingpu-elasticsearch" options="-parameters" />
-      <module name="qingpu-exchanges" options="-parameters" />
+      <module name="qingpu-exchange" options="" />
+      <module name="qingpu-exchange-api" options="-parameters" />
+      <module name="qingpu-exchange-biz" options="-parameters" />
+      <module name="qingpu-exchange-provider" options="-parameters" />
       <module name="qingpu-gateway" options="" />
       <module name="qingpu-gateway-swagger2" options="-parameters" />
       <module name="qingpu-gateway-web" options="-parameters" />
-      <module name="qingpu-user" options="-parameters" />
+      <module name="qingpu-user" options="" />
       <module name="qingpu-user-api" options="-parameters" />
       <module name="qingpu-user-biz" options="-parameters" />
       <module name="qingpu-user-provider" options="-parameters" />

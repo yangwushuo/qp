@@ -95,4 +95,9 @@ public class UserDaoImpl implements UserDao {
         return userMapper.getUserEmailById(uid);
     }
 
+    @Override
+    public String getUserPasswordById(Long uid) {
+        return userMapper.getUserPasswordById(uid);
+    }
+
 }
