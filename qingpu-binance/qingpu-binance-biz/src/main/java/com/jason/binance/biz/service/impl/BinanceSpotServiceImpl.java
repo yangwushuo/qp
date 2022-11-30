@@ -142,7 +142,7 @@ public class BinanceSpotServiceImpl implements BinanceSpotService {
 
     @Override
     public Trade createTrade() {
-        return new Trade(baseUrl, apiKey, secretKey, showLimitUsage);
+        return new Trade(baseUrl, showLimitUsage);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class BinanceSpotServiceImpl implements BinanceSpotService {
 
     @Override
     public Wallet createWallet() {
-        return new Wallet(baseUrl, apiKey, secretKey, showLimitUsage);
+        return new Wallet(baseUrl, showLimitUsage);
     }
 
 }

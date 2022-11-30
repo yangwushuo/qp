@@ -1,6 +1,7 @@
 package com.jason.exchange.biz.service.impl;
 
-import com.jason.binance.api.request.BinanceKeyRequest;
+import com.alibaba.fastjson.JSONObject;
+import com.jason.binance.api.request.BinanceParamRequest;
 import com.jason.binance.api.service.BinanceRemoteService;
 import com.jason.common.Result.CommonResult;
 import com.jason.common.exception.AddException;
@@ -17,6 +18,7 @@ import com.jason.exchange.biz.po.*;
 import com.jason.exchange.biz.service.ExchangeService;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -134,42 +136,147 @@ public class ExchangeServiceImpl implements ExchangeService {
         }
 
         //判断该添加账户是否只读
-        BinanceKeyRequest binanceKeyRequest = BinanceKeyRequest.builder()
+        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
                 .apiKey(addCoinExchangeAccountBo.getApiKey())
                 .secretKey(addCoinExchangeAccountBo.getSecretKey())
                 .build();
-        CommonResult<String> orderTestRes = binanceRemoteService.orderTest(binanceKeyRequest);
-        if (orderTestRes.getCode() == 200){
-            throw new AddException("密钥对不是只读,请修改只读权限再尝试");
+        CommonResult<String> reqRes = binanceRemoteService.accountPer(binanceParamRequest);
+        if (reqRes.getCode() == 200 && reqRes.getData().length() > 0){
+            //解析
+            JSONObject jsonObject = JSONObject.parseObject(reqRes.getData());
+            Boolean enableReading = jsonObject.getBoolean("enableReading");
+            if (enableReading){
+                //添加账号
+                AddCoinExchangeAccountPo addCoinExchangeAccountPo = coinExchangeMapStruct.addCoinExchangeAccountBo2Po(addCoinExchangeAccountBo);
+                Long createTime = System.currentTimeMillis();
+                exchangeDao.addCoinExchangeAccount(userId, createTime, addCoinExchangeAccountPo);
+                exchangeDao.addCoinExchangeAccountPer(addCoinExchangeAccountPo);
+            }else{
+                throw new AddException("添加账号失败,账号非只读");
+            }
+        }else{
+            throw new AddException("添加账户失败");
         }
-        System.out.println(orderTestRes);
-
-        //添加账号
-        AddCoinExchangeAccountPo addCoinExchangeAccountPo = coinExchangeMapStruct.addCoinExchangeAccountBo2Po(addCoinExchangeAccountBo);
-        Long createTime = System.currentTimeMillis();
-        exchangeDao.addCoinExchangeAccount(userId, createTime, addCoinExchangeAccountPo);
-        exchangeDao.addCoinExchangeAccountPer(addCoinExchangeAccountPo);
 
     }
 
     @Override
-    public String getBinanceSpotAccountInfo(Long userId, Long exAccId) {
+    public Object getBinanceSpotAccountInfo(Long userId, Long exAccId) {
         if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
-            throw new GetException("参数错误,删除失败");
+            throw new GetException("参数错误,获取失败");
         }
 
         CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
-        BinanceKeyRequest binanceKeyRequest = BinanceKeyRequest.builder()
+        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
                 .apiKey(coinExchangeAccountKey.getApiKey())
                 .secretKey(coinExchangeAccountKey.getSecretKey())
                 .build();
 
-        CommonResult<String> remoteRes = binanceRemoteService.accountInfo(binanceKeyRequest);
+        CommonResult<String> remoteRes = binanceRemoteService.spotAccountInfo(binanceParamRequest);
         if (remoteRes.getCode() != 200){
-            throw new GetException("获取失败");
+            throw new GetException(remoteRes.getMessage());
         }
 
-        return remoteRes.getData();
+        return JSONObject.parse(remoteRes.getData());
     }
+
+    @Override
+    public Object getBinanceSpotOrders(Long userId, Long exAccId, String symbol, Long orderId, Long startTime, Long endTime, Integer limit) {
+        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
+            throw new GetException("参数错误,获取失败");
+        }
+
+        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
+        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
+                .apiKey(coinExchangeAccountKey.getApiKey())
+                .secretKey(coinExchangeAccountKey.getSecretKey())
+                .build();
+        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
+        if (symbol != null) params.put("symbol", symbol);
+        if (orderId != null) params.put("orderId", orderId);
+        if (startTime != null)params.put("startTime", startTime);
+        if (endTime != null)params.put("endTime", endTime);
+        if (limit != null)params.put("limit",limit);
+        binanceParamRequest.setParams(params);
+
+        CommonResult<String> remoteRes = binanceRemoteService.spotAllOrders(binanceParamRequest);
+        if (remoteRes.getCode() != 200){
+            throw new GetException(remoteRes.getMessage());
+        }
+
+        return JSONObject.parse(remoteRes.getData());
+
+    }
+
+    @Override
+    public Object getBinanceSpotOpenOrders(Long userId, Long exAccId, String symbol) {
+        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
+            throw new GetException("参数错误,获取失败");
+        }
+
+        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
+        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
+                .apiKey(coinExchangeAccountKey.getApiKey())
+                .secretKey(coinExchangeAccountKey.getSecretKey())
+                .build();
+        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
+        if (symbol != null) params.put("symbol", symbol);
+        binanceParamRequest.setParams(params);
+
+        CommonResult<String> remoteRes = binanceRemoteService.spotOpenOrders(binanceParamRequest);
+        if (remoteRes.getCode() != 200){
+            throw new GetException(remoteRes.getMessage());
+        }
+
+        return JSONObject.parse(remoteRes.getData());
+    }
+
+    @Override
+    public Object getBinanceSpotOcoOrders(Long userId, Long exAccId, Long fromId, Long startTime, Long endTime, Integer limit) {
+        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
+            throw new GetException("参数错误,获取失败");
+        }
+
+        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
+        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
+                .apiKey(coinExchangeAccountKey.getApiKey())
+                .secretKey(coinExchangeAccountKey.getSecretKey())
+                .build();
+        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
+        if (fromId != null) params.put("fromId", fromId);
+        if (startTime != null) params.put("startTime", startTime);
+        if (endTime != null) params.put("endTime", endTime);
+        if (limit != null) params.put("limit", limit);
+        binanceParamRequest.setParams(params);
+
+        CommonResult<String> remoteRes = binanceRemoteService.spotOcoOrders(binanceParamRequest);
+        if (remoteRes.getCode() != 200){
+            throw new GetException(remoteRes.getMessage());
+        }
+
+        return JSONObject.parse(remoteRes.getData());
+    }
+
+    @Override
+    public Object getBinanceSpotOpenOcoOrders(Long userId, Long exAccId) {
+        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
+            throw new GetException("参数错误,获取失败");
+        }
+
+        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
+        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
+                .apiKey(coinExchangeAccountKey.getApiKey())
+                .secretKey(coinExchangeAccountKey.getSecretKey())
+                .params(new LinkedHashMap<>())
+                .build();
+
+        CommonResult<String> remoteRes = binanceRemoteService.spotOpenOcoOrders(binanceParamRequest);
+        if (remoteRes.getCode() != 200){
+            throw new GetException(remoteRes.getMessage());
+        }
+
+        return JSONObject.parse(remoteRes.getData());
+    }
+
 
 }

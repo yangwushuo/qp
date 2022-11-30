@@ -110,9 +110,57 @@ public class ExchangeRemoteServiceImpl implements ExchangeRemoteService {
             @ApiResponse(code = 200, message = "获取成功"),
             @ApiResponse(code = 500, message = "获取失败")
     })
-    public CommonResult<String> getUserBinanceSpotAccountInfo(String userInfo, Long exAccId) {
+    public CommonResult<Object> getUserBinanceSpotAccountInfo(String userInfo, Long exAccId) {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
         return CommonResult.success(exchangeService.getBinanceSpotAccountInfo(headerUserInfo.getId(), exAccId));
+    }
+
+    @Override
+    @ApiOperation(value ="获取用户币安现货账号信息", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "exAccId", value = "交易账号id", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<Object> getUserBinanceSpotOrders(String userInfo, Long exAccId, String symbol, Long orderId, Long startTime, Long endTime, Integer limit) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        return CommonResult.success(exchangeService.getBinanceSpotOrders(headerUserInfo.getId(), exAccId, symbol, orderId, startTime, endTime, limit));
+    }
+
+    @Override
+    @ApiOperation(value ="获取用户币安现货挂单", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "exAccId", value = "交易账号id", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<Object> getUserBinanceSpotOpenOrders(String userInfo, Long exAccId, String symbol) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        return CommonResult.success(exchangeService.getBinanceSpotOpenOrders(headerUserInfo.getId(), exAccId, symbol));
+    }
+
+    @Override
+    @ApiOperation(value ="获取用户币安现货所有OCO订单", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "exAccId", value = "交易账号id", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<Object> getUserBinanceSpotOcoOrders(String userInfo, Long exAccId, Long fromId, Long startTime, Long endTime, Integer limit) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        return CommonResult.success(exchangeService.getBinanceSpotOcoOrders(headerUserInfo.getId(), exAccId, fromId, startTime, endTime, limit));
+    }
+
+    @Override
+    @ApiOperation(value ="获取用户币安现货所有OCO挂单", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "query", name = "exAccId", value = "交易账号id", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<Object> getUserBinanceSpotOpenOcoOrders(String userInfo, Long exAccId) {
+        HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
+        return CommonResult.success(exchangeService.getBinanceSpotOpenOcoOrders(headerUserInfo.getId(), exAccId));
     }
 
 }

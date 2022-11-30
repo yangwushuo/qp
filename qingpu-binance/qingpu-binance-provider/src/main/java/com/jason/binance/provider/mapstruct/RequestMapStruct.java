@@ -1,6 +1,6 @@
 package com.jason.binance.provider.mapstruct;
 
-import com.jason.binance.api.request.BinanceKeyRequest;
+import com.jason.binance.api.request.BinanceParamRequest;
 import com.jason.binance.biz.bo.BinanceKeyBo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -14,6 +14,6 @@ public interface RequestMapStruct {
 
     RequestMapStruct INSTANCE = Mappers.getMapper(RequestMapStruct.class);
 
-    BinanceKeyBo binanceKeyRequestRequest2Bo(BinanceKeyRequest binanceKeyRequest);
+    BinanceKeyBo binanceKeyRequestRequest2Bo(BinanceParamRequest binanceParamRequest);
 
 }

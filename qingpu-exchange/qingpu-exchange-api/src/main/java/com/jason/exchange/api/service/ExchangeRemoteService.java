@@ -7,7 +7,6 @@ import com.jason.exchange.api.request.UpCoinExchangeAccountRequest;
 import com.jason.exchange.api.response.CoinExchangeAccountResponse;
 import com.jason.exchange.api.response.CoinExchangeResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -84,14 +83,78 @@ public interface ExchangeRemoteService {
     /**
      * @return a
      * @Author yangwushuo
-     * @Descrition //TODO 获取指定交易账户的现货资产信息
+     * @Descrition //TODO 获取币安交易账户的现货资产信息
      * @Date 22:04 2022/11/26
     * @Param
      **/
     @GetMapping("/ex/user/binance/acc/info")
-    CommonResult<String> getUserBinanceSpotAccountInfo(
+    CommonResult<Object> getUserBinanceSpotAccountInfo(
             @RequestHeader("user")String userInfo,
             @RequestParam("exAccId") Long exAccId
     );
+
+    /**
+     * @return a
+     * @Author yangwushuo
+     * @Decription //TODO 获取币安交易账户的订单
+     * @Date 14:40 2022/11/28
+     * @Param
+     **/
+    @GetMapping("/ex/user/binance/spot/orders")
+    CommonResult<Object> getUserBinanceSpotOrders(
+            @RequestHeader("user")String userInfo,
+            @RequestParam("exAccId") Long exAccId,
+            @RequestParam("symbol") String symbol,
+            @RequestParam(value = "orderId",required = false) Long orderId,
+            @RequestParam(value = "startTime",required = false) Long startTime,
+            @RequestParam(value = "endTime",required = false) Long endTime,
+            @RequestParam(value = "limit",required = false) Integer limit
+    );
+
+    /**
+     * @return a
+     * @Author yangwushuo
+     * @Decription //TODO 获取币安交易账户的挂单
+     * @Date 19:20 2022/11/29
+     * @Param
+     **/
+    @GetMapping("/ex/user/binance/spot/openOrders")
+    CommonResult<Object> getUserBinanceSpotOpenOrders(
+            @RequestHeader("user") String userInfo,
+            @RequestParam("exAccId") Long exAccId,
+            @RequestParam(value = "symbol",required = false) String symbol
+    );
+
+    /**
+     * @return a
+     * @Author yangwushuo
+     * @Decription //TODO 获取币安交易账户所有Oco订单
+     * @Date 19:55 2022/11/29
+     * @Param
+     **/
+    @GetMapping("/ex/user/binance/spot/ocoOrders")
+    CommonResult<Object> getUserBinanceSpotOcoOrders(
+            @RequestHeader("user") String userInfo,
+            @RequestParam("exAccId") Long exAccId,
+            @RequestParam(value = "fromId",required = false) Long fromId,
+            @RequestParam(value = "startTime",required = false) Long startTime,
+            @RequestParam(value = "endTime", required = false) Long endTime,
+            @RequestParam(value = "limit", required = false) Integer limit
+    );
+
+    /**
+     * @return a
+     * @Author yangwushuo
+     * @Decription //TODO 获取币安交易账号所有oco挂单
+     * @Date 20:20 2022/11/29
+     * @Param
+     **/
+    @GetMapping("/ex/user/binance/spot/openOcoOrders")
+    CommonResult<Object> getUserBinanceSpotOpenOcoOrders(
+            @RequestHeader("user") String userInfo,
+            @RequestParam("exAccId") Long exAccId
+    );
+
+
 
 }
