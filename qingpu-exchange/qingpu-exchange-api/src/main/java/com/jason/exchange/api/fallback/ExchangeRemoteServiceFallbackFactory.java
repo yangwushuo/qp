@@ -42,30 +42,6 @@ public class ExchangeRemoteServiceFallbackFactory implements FallbackFactory<Exc
                 return CommonResult.failed("删除失败");
             }
 
-            @Override
-            public CommonResult<Object> getUserBinanceSpotAccountInfo(String userInfo, Long exAccId) {
-                return CommonResult.failed("获取失败");
-            }
-
-            @Override
-            public CommonResult<Object> getUserBinanceSpotOrders(String userInfo, Long exAccId, String symbol, Long orderId, Long startTime, Long endTime, Integer limit) {
-                return CommonResult.failed("获取失败");
-            }
-
-            @Override
-            public CommonResult<Object> getUserBinanceSpotOpenOrders(String userInfo, Long exAccId, String symbol) {
-                return CommonResult.failed("获取失败");
-            }
-
-            @Override
-            public CommonResult<Object> getUserBinanceSpotOcoOrders(String userInfo, Long exAccId, Long fromId, Long startTime, Long endTime, Integer limit) {
-                return CommonResult.failed("获取失败");
-            }
-
-            @Override
-            public CommonResult<Object> getUserBinanceSpotOpenOcoOrders(String userInfo, Long exAccId) {
-                return CommonResult.failed("获取失败");
-            }
         };
     }
 }

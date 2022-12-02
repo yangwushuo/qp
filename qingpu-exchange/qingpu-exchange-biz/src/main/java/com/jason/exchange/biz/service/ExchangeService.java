@@ -25,13 +25,4 @@ public interface ExchangeService {
 
     void addCoinExchangeAccount(Long userId, AddCoinExchangeAccountBo addCoinExchangeAccountBo);
 
-    Object getBinanceSpotAccountInfo(Long userId, Long exAccId);
-
-    Object getBinanceSpotOrders(Long userId, Long exAccId, String symbol, Long orderId, Long startTime, Long endTime, Integer limit);
-
-    Object getBinanceSpotOpenOrders(Long userId, Long exAccId, String symbol);
-
-    Object getBinanceSpotOcoOrders(Long userId, Long exAccId, Long fromId, Long startTime, Long endTime, Integer limit);
-
-    Object getBinanceSpotOpenOcoOrders(Long userId, Long exAccId);
 }

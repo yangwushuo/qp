@@ -14,6 +14,11 @@ public class RequestHandler {
     private final String secretKey;
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
+    public RequestHandler(){
+        this.apiKey = null;
+        this.secretKey = null;
+    }
+
     public RequestHandler(String apiKey) {
         this.apiKey = apiKey;
         this.secretKey = null;

@@ -1,7 +1,7 @@
 package com.jason.binance.provider.service;
 
 import com.jason.binance.api.request.BinanceParamRequest;
-import com.jason.binance.api.service.BinanceRemoteService;
+import com.jason.binance.api.service.BinanceSpotRemoteService;
 import com.jason.binance.biz.service.impl.spot.Trade;
 import com.jason.binance.biz.service.impl.spot.Wallet;
 import com.jason.binance.biz.utils.RequestHandler;
@@ -17,8 +17,8 @@ import java.util.LinkedHashMap;
  * @time：2022/11/23 16:18
  */
 @RestController
-@Api(tags = "binance api")
-public class BinanceRemoteServiceImpl implements BinanceRemoteService {
+@Api(tags = "binance spot api")
+public class BinanceSpotRemoteServiceImpl implements BinanceSpotRemoteService {
 
     private final RequestMapStruct requestMapStruct;
 
@@ -26,7 +26,7 @@ public class BinanceRemoteServiceImpl implements BinanceRemoteService {
 
     private final Trade trade;
 
-    public BinanceRemoteServiceImpl(RequestMapStruct requestMapStruct, Wallet wallet, Trade trade) {
+    public BinanceSpotRemoteServiceImpl(RequestMapStruct requestMapStruct, Wallet wallet, Trade trade) {
         this.requestMapStruct = requestMapStruct;
         this.wallet = wallet;
         this.trade = trade;
@@ -120,6 +120,32 @@ public class BinanceRemoteServiceImpl implements BinanceRemoteService {
     public CommonResult<String> spotOpenOcoOrders(BinanceParamRequest binanceParamRequest) {
         RequestHandler requestHandler = new RequestHandler(binanceParamRequest.getApiKey(), binanceParamRequest.getSecretKey());
         String reqRes = trade.getOpenOCOOrders(requestHandler, binanceParamRequest.getParams());
+        return CommonResult.success(reqRes);
+    }
+
+    @Override
+    @ApiOperation(value ="币安现货成交历史", notes = "ROLE:SERVICE")
+    @ApiImplicitParam(paramType = "body", name = "binanceKey", value = "币安密钥对", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<String> spotTrades(BinanceParamRequest binanceParamRequest) {
+        RequestHandler requestHandler = new RequestHandler(binanceParamRequest.getApiKey(), binanceParamRequest.getSecretKey());
+        String reqRes = trade.myTrades(requestHandler, binanceParamRequest.getParams());
+        return CommonResult.success(reqRes);
+    }
+
+    @Override
+    @ApiOperation(value ="币安现货目前下单数", notes = "ROLE:SERVICE")
+    @ApiImplicitParam(paramType = "body", name = "binanceKey", value = "币安密钥对", required = true)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 500, message = "获取失败")
+    })
+    public CommonResult<String> spotRateLimitOrder(BinanceParamRequest binanceParamRequest) {
+        RequestHandler requestHandler = new RequestHandler(binanceParamRequest.getApiKey(), binanceParamRequest.getSecretKey());
+        String reqRes = trade.rateLimitOrder(requestHandler, binanceParamRequest.getParams());
         return CommonResult.success(reqRes);
     }
 

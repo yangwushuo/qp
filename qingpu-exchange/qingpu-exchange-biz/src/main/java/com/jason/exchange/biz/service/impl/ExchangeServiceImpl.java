@@ -2,7 +2,7 @@ package com.jason.exchange.biz.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jason.binance.api.request.BinanceParamRequest;
-import com.jason.binance.api.service.BinanceRemoteService;
+import com.jason.binance.api.service.BinanceSpotRemoteService;
 import com.jason.common.Result.CommonResult;
 import com.jason.common.exception.AddException;
 import com.jason.common.exception.DelException;
@@ -30,11 +30,11 @@ public class ExchangeServiceImpl implements ExchangeService {
 
     private final ExchangeDao exchangeDao;
 
-    private final BinanceRemoteService binanceRemoteService;
+    private final BinanceSpotRemoteService binanceRemoteService;
 
     private final CoinExchangeMapStruct coinExchangeMapStruct;
 
-    public ExchangeServiceImpl(ExchangeDao exchangeDao, BinanceRemoteService binanceRemoteService, CoinExchangeMapStruct coinExchangeMapStruct) {
+    public ExchangeServiceImpl(ExchangeDao exchangeDao, BinanceSpotRemoteService binanceRemoteService, CoinExchangeMapStruct coinExchangeMapStruct) {
         this.exchangeDao = exchangeDao;
         this.binanceRemoteService = binanceRemoteService;
         this.coinExchangeMapStruct = coinExchangeMapStruct;
@@ -159,124 +159,5 @@ public class ExchangeServiceImpl implements ExchangeService {
         }
 
     }
-
-    @Override
-    public Object getBinanceSpotAccountInfo(Long userId, Long exAccId) {
-        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
-            throw new GetException("参数错误,获取失败");
-        }
-
-        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
-        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
-                .apiKey(coinExchangeAccountKey.getApiKey())
-                .secretKey(coinExchangeAccountKey.getSecretKey())
-                .build();
-
-        CommonResult<String> remoteRes = binanceRemoteService.spotAccountInfo(binanceParamRequest);
-        if (remoteRes.getCode() != 200){
-            throw new GetException(remoteRes.getMessage());
-        }
-
-        return JSONObject.parse(remoteRes.getData());
-    }
-
-    @Override
-    public Object getBinanceSpotOrders(Long userId, Long exAccId, String symbol, Long orderId, Long startTime, Long endTime, Integer limit) {
-        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
-            throw new GetException("参数错误,获取失败");
-        }
-
-        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
-        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
-                .apiKey(coinExchangeAccountKey.getApiKey())
-                .secretKey(coinExchangeAccountKey.getSecretKey())
-                .build();
-        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
-        if (symbol != null) params.put("symbol", symbol);
-        if (orderId != null) params.put("orderId", orderId);
-        if (startTime != null)params.put("startTime", startTime);
-        if (endTime != null)params.put("endTime", endTime);
-        if (limit != null)params.put("limit",limit);
-        binanceParamRequest.setParams(params);
-
-        CommonResult<String> remoteRes = binanceRemoteService.spotAllOrders(binanceParamRequest);
-        if (remoteRes.getCode() != 200){
-            throw new GetException(remoteRes.getMessage());
-        }
-
-        return JSONObject.parse(remoteRes.getData());
-
-    }
-
-    @Override
-    public Object getBinanceSpotOpenOrders(Long userId, Long exAccId, String symbol) {
-        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
-            throw new GetException("参数错误,获取失败");
-        }
-
-        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
-        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
-                .apiKey(coinExchangeAccountKey.getApiKey())
-                .secretKey(coinExchangeAccountKey.getSecretKey())
-                .build();
-        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
-        if (symbol != null) params.put("symbol", symbol);
-        binanceParamRequest.setParams(params);
-
-        CommonResult<String> remoteRes = binanceRemoteService.spotOpenOrders(binanceParamRequest);
-        if (remoteRes.getCode() != 200){
-            throw new GetException(remoteRes.getMessage());
-        }
-
-        return JSONObject.parse(remoteRes.getData());
-    }
-
-    @Override
-    public Object getBinanceSpotOcoOrders(Long userId, Long exAccId, Long fromId, Long startTime, Long endTime, Integer limit) {
-        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
-            throw new GetException("参数错误,获取失败");
-        }
-
-        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
-        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
-                .apiKey(coinExchangeAccountKey.getApiKey())
-                .secretKey(coinExchangeAccountKey.getSecretKey())
-                .build();
-        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
-        if (fromId != null) params.put("fromId", fromId);
-        if (startTime != null) params.put("startTime", startTime);
-        if (endTime != null) params.put("endTime", endTime);
-        if (limit != null) params.put("limit", limit);
-        binanceParamRequest.setParams(params);
-
-        CommonResult<String> remoteRes = binanceRemoteService.spotOcoOrders(binanceParamRequest);
-        if (remoteRes.getCode() != 200){
-            throw new GetException(remoteRes.getMessage());
-        }
-
-        return JSONObject.parse(remoteRes.getData());
-    }
-
-    @Override
-    public Object getBinanceSpotOpenOcoOrders(Long userId, Long exAccId) {
-        if (userId == null || userId < 0 || exAccId == null || exAccId < 0){
-            throw new GetException("参数错误,获取失败");
-        }
-
-        CoinExchangeAccountKeyPo coinExchangeAccountKey = exchangeDao.getCoinExchangeAccountKeyById(userId, exAccId);
-        BinanceParamRequest binanceParamRequest = BinanceParamRequest.builder()
-                .apiKey(coinExchangeAccountKey.getApiKey())
-                .secretKey(coinExchangeAccountKey.getSecretKey())
-                .params(new LinkedHashMap<>())
-                .build();
-
-        CommonResult<String> remoteRes = binanceRemoteService.spotOpenOcoOrders(binanceParamRequest);
-        if (remoteRes.getCode() != 200){
-            throw new GetException(remoteRes.getMessage());
-        }
-
-        return JSONObject.parse(remoteRes.getData());
-    }
-
 
 }

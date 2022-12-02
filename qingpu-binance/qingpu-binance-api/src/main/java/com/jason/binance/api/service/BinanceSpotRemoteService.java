@@ -1,6 +1,6 @@
 package com.jason.binance.api.service;
 
-import com.jason.binance.api.fallback.BinanceRemoteServiceFallbackFactory;
+import com.jason.binance.api.fallback.BinanceSpotRemoteServiceFallbackFactory;
 import com.jason.binance.api.request.BinanceParamRequest;
 import com.jason.common.Result.CommonResult;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
+ * 币安现货账户服务
  * @author：yangwushuo
  * @time：2022/11/23 15:50
  */
-@FeignClient(name = "qingpu-binance-provider", fallbackFactory = BinanceRemoteServiceFallbackFactory.class)
-public interface BinanceRemoteService {
+@FeignClient(name = "qingpu-binance-provider", fallbackFactory = BinanceSpotRemoteServiceFallbackFactory.class)
+public interface BinanceSpotRemoteService {
 
     /**
      * @return a
@@ -21,7 +22,7 @@ public interface BinanceRemoteService {
      * @Date 10:05 2022/11/28
      * @Param
      **/
-    @PostMapping("/binance/order/test")
+    @PostMapping("/binance/spot/order/test")
     CommonResult<String> spotOrderTest(@RequestBody BinanceParamRequest binanceParamRequest);
 
     /**
@@ -31,7 +32,7 @@ public interface BinanceRemoteService {
      * @Date 10:05 2022/11/28
      * @Param
      **/
-    @PostMapping("/binance/account/info")
+    @PostMapping("/binance/spot/account/info")
     CommonResult<String> spotAccountInfo(@RequestBody BinanceParamRequest binanceParamRequest);
 
     /**
@@ -85,4 +86,23 @@ public interface BinanceRemoteService {
     @PostMapping("/binance/spot/ocoOpenOrders")
     CommonResult<String> spotOpenOcoOrders(@RequestBody BinanceParamRequest binanceParamRequest);
 
+    /**
+     * @return a
+     * @Author yangwushuo
+     * @Decription //TODO 获取现货交易成交历史
+     * @Date 8:07 2022/12/1
+     * @Param
+     **/
+    @PostMapping("/binance/spot/myTrades")
+    CommonResult<String> spotTrades(@RequestBody BinanceParamRequest binanceParamRequest);
+
+    /**
+     * @return a
+     * @Author yangwushuo
+     * @Decription //TODO 获取现货目前的下单数
+     * @Date 8:40 2022/12/1
+     * @Param
+     **/
+    @PostMapping("/binance/spot/rateLimit/order")
+    CommonResult<String> spotRateLimitOrder(@RequestBody BinanceParamRequest binanceParamRequest);
 }

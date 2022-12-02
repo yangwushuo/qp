@@ -1,7 +1,7 @@
 package com.jason.binance.api.fallback;
 
 import com.jason.binance.api.request.BinanceParamRequest;
-import com.jason.binance.api.service.BinanceRemoteService;
+import com.jason.binance.api.service.BinanceSpotRemoteService;
 import com.jason.common.Result.CommonResult;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -9,10 +9,10 @@ import org.springframework.cloud.openfeign.FallbackFactory;
  * @author：yangwushuo
  * @time：2022/11/23 16:00
  */
-public class BinanceRemoteServiceFallbackFactory implements FallbackFactory<BinanceRemoteService> {
+public class BinanceSpotRemoteServiceFallbackFactory implements FallbackFactory<BinanceSpotRemoteService> {
     @Override
-    public BinanceRemoteService create(Throwable cause) {
-        return new BinanceRemoteService() {
+    public BinanceSpotRemoteService create(Throwable cause) {
+        return new BinanceSpotRemoteService() {
 
             @Override
             public CommonResult<String> spotOrderTest(BinanceParamRequest binanceKey) {
@@ -47,6 +47,16 @@ public class BinanceRemoteServiceFallbackFactory implements FallbackFactory<Bina
             @Override
             public CommonResult<String> spotOpenOcoOrders(BinanceParamRequest binanceParamRequest) {
                 return CommonResult.failed("获取Oco挂单失败");
+            }
+
+            @Override
+            public CommonResult<String> spotTrades(BinanceParamRequest binanceParamRequest) {
+                return CommonResult.failed("获取成交历史失败");
+            }
+
+            @Override
+            public CommonResult<String> spotRateLimitOrder(BinanceParamRequest binanceParamRequest) {
+                return CommonResult.failed("获取目前下单数失败");
             }
         };
     }
