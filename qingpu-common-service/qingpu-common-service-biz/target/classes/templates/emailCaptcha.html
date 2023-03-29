@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<div>
+    <includetail>
+        <div align="center">
+            <div class="open_email" style="margin-left: 8px; margin-top: 8px; margin-bottom: 8px; margin-right: 8px;">
+                <div>
+                    <br>
+                    <span class="genEmailContent">
+                        <div id="cTMail-Wrap"
+                             style="word-break: break-all;box-sizing:border-box;text-align:center;min-width:320px; max-width:660px; border:1px solid #f6f6f6; background-color:#24292E; margin:auto; padding:20px 0 30px; font-family:'helvetica neue',PingFangSC-Light,arial,'hiragino sans gb','microsoft yahei ui','microsoft yahei',simsun,sans-serif">
+                            <div class="main-content" style="">
+                                <table style="width:100%;font-weight:300;margin-bottom:10px;border-collapse:collapse">
+                                    <tbody>
+                                    <tr style="font-weight:300">
+                                        <td style="width:3%;max-width:30px;"></td>
+                                        <td style="max-width:600px;">
+                                            <div id="cTMail-logo" style="width:92px; height:25px;">
+                                                <p style="color: white;font-family: 'Trebuchet MS'; font-size: 20px">QINGPU</p>
+                                            </div>
+                                            <p style="height:2px;border: 0;font-size:0;padding:0;width:100%;margin-top:20px;"></p>
+
+                                            <div id="cTMail-inner"
+                                                 style="background-color:#fff; padding:23px 0 20px;box-shadow: 0px 1px 1px 0px rgba(122, 55, 55, 0.2);text-align:left;">
+                                                <table style="width:100%;font-weight:300;margin-bottom:10px;border-collapse:collapse;text-align:left;">
+                                                    <tbody>
+                                                    <tr style="font-weight:300">
+                                                        <td style="width:3.2%;max-width:30px;"></td>
+                                                        <td style="max-width:480px;text-align:left;">
+                                                            <h1 id="cTMail-title"
+                                                                style="font-size: 20px; line-height: 36px; margin: 0px 0px 22px;">
+                                                                欢迎使用QINGPU
+                                                            </h1>
+
+                                                            <p id="cTMail-userName"
+                                                               style="font-size:16px;color:#333; line-height:24px; margin:0;">
+                                                                尊敬的用户，您好！您的验证码:
+                                                                <span style="font-size: 24px;color: darkgoldenrod" th:text="${captcha}"></span>
+                                                            </p>
+                                                        </td>
+                                                        <td style="width:3.2%;max-width:30px;"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                        <td style="width:3%;max-width:30px;"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </includetail>
+</div>
+
+</body>
+</html>

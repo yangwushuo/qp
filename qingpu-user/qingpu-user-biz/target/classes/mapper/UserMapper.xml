@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jason.user.biz.mapper.UserMapper">
+
+    <resultMap id="userInfoMap" type="com.jason.user.biz.po.UserInfoPo">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="username" property="username" javaType="string" jdbcType="VARCHAR"/>
+        <result column="email" property="email" javaType="string" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" javaType="string" jdbcType="VARCHAR"/>
+        <result column="enabled" property="enabled" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="account_locked" property="accountLocked" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="account_expired" property="accountExpired" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="credentials_expired" property="credentialsExpired" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="portrait_image" property="portraitImage" javaType="string" jdbcType="VARCHAR"/>
+        <result column="introduction" property="introduction" javaType="string" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" javaType="string" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" javaType="long" jdbcType="BIGINT"/>
+        <result column="recently_time" property="recentlyTime" javaType="long" jdbcType="BIGINT"/>
+        <result column="province" property="province" javaType="int" jdbcType="INTEGER"/>
+        <result column="birth" property="birth" javaType="string" jdbcType="VARCHAR"/>
+        <collection property="roles" column="id" javaType="list" ofType="com.jason.user.biz.po.RolePo" select="getUserRoleById"/>
+    </resultMap>
+
+    <resultMap id="roleMap" type="com.jason.user.biz.po.RolePo">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="name" property="name" javaType="string" jdbcType="VARCHAR"/>
+        <result column="name_zh" property="nameZH" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getUserRoleById" resultMap="roleMap">
+        SELECT
+            r2.id,
+            r2.name,
+            r2.name_zh
+        FROM
+            `user_role_rel` AS r1
+            LEFT JOIN `role` AS r2 ON r1.role_id = r2.id
+        WHERE
+            r1.user_id = '${id}'
+    </select>
+
+    <select id="getUserInfo" resultMap="userInfoMap">
+        SELECT
+            u.id,
+            username,
+            email,
+            phone,
+            enabled,
+            account_locked,
+            account_expired,
+            credentials_expired,
+            portrait_image,
+            introduction,
+            sex,
+            create_time,
+            recently_time,
+            province,
+            birth
+        FROM
+            `user` AS u
+            LEFT JOIN `user_info` AS ui ON u.id = ui.user_id
+        WHERE
+            u.id = '${id}'
+    </select>
+
+    <select id="getUserAmountById" resultType="int">
+        SELECT
+            COUNT(id)
+        FROM
+            `user`
+        WHERE
+            id = '${id}'
+    </select>
+
+    <select id="getRoleIdByName" resultType="java.lang.Long">
+        SELECT
+            `id`
+        FROM
+            `role`
+        WHERE
+            name = '${roleName}'
+    </select>
+
+    <update id="upUserInfoById">
+        UPDATE
+            `user` AS u1 LEFT JOIN `user_info` AS u2 ON u1.id = u2.user_id
+        SET
+            <if test="uui.username != null">
+                u1.`username` = '${uui.username}',
+            </if>
+            <if test="uui.portraitImage != null">
+                u2.`portrait_image` = '${uui.portraitImage}',
+            </if>
+            <if test="uui.sex != null">
+                u2.`sex` = '${uui.sex}',
+            </if>
+            <if test="uui.introduction != null">
+                u2.`introduction` = '${uui.introduction}',
+            </if>
+            <if test="uui.province != null">
+                u2.`province` = '${uui.province}',
+            </if>
+            <if test="uui.birth != null">
+                u2.`birth` = '${uui.birth}',
+            </if>
+            u1.`id` = '${id}'
+        WHERE
+            u1.`id` = '${id}'
+    </update>
+
+    <insert id="addAccount" useGeneratedKeys="true" keyProperty="id" parameterType="com.jason.user.biz.po.AddAccountPo">
+        INSERT INTO
+            `user`(`username`,
+                    `password`,
+                    `enabled`,
+                    `account_expired`,
+                   `account_locked`,
+                   `credentials_expired`,
+                   `email`,
+                   `phone`)
+        VALUES
+            <if test="ac.symbol != null and ac.symbol == 1">
+                ('${ac.username}','${ac.password}',1,1,1,1,"",'${ac.content}')
+            </if>
+            <if test="ac.symbol != null and ac.symbol == 2">
+                ('${ac.username}','${ac.password}',1,1,1,1,'${ac.content}',"")
+            </if>
+    </insert>
+
+    <insert id="addAccountInfo">
+        INSERT INTO
+            `user_info`(`user_id`,`portrait_image`,`create_time`)
+        VALUES
+            ('${ac.id}','${ac.portraitImage}','${ac.createTime}')
+    </insert>
+
+    <insert id="addRole">
+        INSERT INTO
+            `user_role_rel`(`user_id`,`role_id`)
+        VALUES
+            ('${uid}','${rid}')
+    </insert>
+
+    <insert id="addFollow">
+        INSERT INTO
+            `follow`(`user_id`,`follow_user_id`,`follow_time`)
+        VALUES
+            ('${uid}','${fid}','${followTime}')
+    </insert>
+
+    <resultMap id="followMap" type="com.jason.user.biz.po.FollowPo">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="follow_user_id" property="followUserId" javaType="long" jdbcType="BIGINT"/>
+        <result column="follow_time" property="followTime" javaType="long" jdbcType="BIGINT"/>
+        <result column="username" property="username" javaType="string" jdbcType="VARCHAR"/>
+        <result column="introduction" property="introduction" javaType="string" jdbcType="VARCHAR"/>
+        <result column="portrait_image" property="portraitImage" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getFollowByUserId" resultMap="followMap">
+        SELECT
+            f.`id`,
+            f.`follow_user_id`,
+            f.`follow_time`,
+            u.`username`,
+            ui.`introduction`,
+            ui.`portrait_image`
+        FROM
+            `follow` AS f LEFT JOIN `user` AS u ON f.`follow_user_id` = u.`id`
+                          LEFT JOIN `user_info` AS ui ON u.`id` = ui.`user_id`
+        WHERE
+            f.`user_id` = '${uid}'
+            <if test="fid != null">
+                AND f.`follow_user_id` = '${fid}'
+            </if>
+    </select>
+
+    <delete id="delFollow">
+        DELETE FROM `follow`
+        WHERE `user_id` = '${uid}' AND `follow_user_id` = '${fid}';
+    </delete>
+
+    <update id="upPhone">
+        UPDATE
+            `user`
+        SET
+            `phone` = '${phone}'
+        WHERE
+            `id` = '${uid}'
+    </update>
+
+    <update id="upEmail">
+        UPDATE
+            `user`
+        SET
+            `email` = '${email}'
+        WHERE
+            `id` = '${uid}'
+    </update>
+
+    <select id="getUserPhoneById" resultType="java.lang.String">
+        SELECT
+            `phone`
+        FROM
+            `user`
+        WHERE
+            `id` = '${uid}'
+    </select>
+
+    <select id="getUserEmailById" resultType="java.lang.String">
+        SELECT
+            `email`
+        FROM
+            `user`
+        WHERE
+            `id` = '${uid}'
+    </select>
+
+    <select id="getUserPasswordById" resultType="java.lang.String">
+        SELECT
+            `password`
+        FROM
+            `user`
+        WHERE
+            `id` = '${uid}'
+    </select>
+
+
+</mapper>

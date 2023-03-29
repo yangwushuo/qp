@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.jason.exchange.api.autoconfigure.RemoteServiceAutoConfigure

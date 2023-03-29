@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jason.exchange.biz.mapper.CoinExchangeMapper">
+
+    <resultMap id="coinExchangeMap" type="com.jason.exchange.biz.po.CoinExchangePo">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="name" property="name" javaType="string" jdbcType="VARCHAR"/>
+        <result column="spot" property="spot" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="usd_future" property="usdFuture" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="coin_future" property="coinFuture" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="option" property="option" javaType="boolean" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <select id="getAllCoinExchange" resultMap="coinExchangeMap">
+        SELECT
+            `id`,
+            `name`,
+            `spot`,
+            `usd_future`,
+            `coin_future`,
+            `option`
+        FROM
+            `exchange`
+    </select>
+
+    <select id="getCoinExchange" resultMap="coinExchangeMap">
+        SELECT
+            `id`,
+            `name`,
+            `spot`,
+            `usd_future`,
+            `coin_future`,
+            `option`
+        FROM
+            `exchange`
+        WHERE
+            `id` = '${exId}'
+    </select>
+
+    <resultMap id="coinExchangeAccountPerMap" type="com.jason.exchange.biz.po.CoinExchangeAccountPerPo">
+        <result column="exchange_account_id" property="exchangeAccountId" javaType="long" jdbcType="BIGINT"/>
+        <result column="ver_code_follow" property="verCodeFollow" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="online" property="online" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="money_show" property="moneyShow" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="trade_history" property="tradeHistroy" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="option" property="option" javaType="boolean" jdbcType="TINYINT"/>
+        <result column="ver_code" property="verCode" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getCoinExchangeAccountPerById" resultMap="coinExchangeAccountPerMap">
+        SELECT
+            `exchange_account_id`,
+            `ver_code_follow`,
+            `ver_code`,
+            `online`,
+            `money_show`,
+            `trade_history`,
+            `option`
+        FROM
+            `exchange_account_permissions`
+        WHERE
+            `exchange_account_id` = '${exAccId}'
+    </select>
+
+    <resultMap id="coinExchangeAccountMap" type="com.jason.exchange.biz.po.CoinExchangeAccountPo">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" javaType="long" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" javaType="long" jdbcType="BIGINT"/>
+        <result column="latest_use_time" property="latestUseTime" javaType="long" jdbcType="BIGINT"/>
+        <result column="api_key" property="apiKey" javaType="string" jdbcType="VARCHAR"/>
+        <result column="secret_key" property="secretKey" javaType="string" jdbcType="VARCHAR"/>
+        <result column="api_password" property="apiPassword" javaType="string" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" javaType="string" jdbcType="VARCHAR"/>
+        <result column="usage_account" property="usageAccount" javaType="integer" jdbcType="INTEGER"/>
+        <association property="coinExchangePo" column="exId" javaType="com.jason.exchange.biz.po.CoinExchangePo" select="getCoinExchange" />
+        <association property="coinExchangeAccountPerPo" column="id" javaType="com.jason.exchange.biz.po.CoinExchangeAccountPerPo" select="getCoinExchangeAccountPerById"/>
+    </resultMap>
+
+    <select id="getCoinExchangeAccountById" resultMap="coinExchangeAccountMap">
+        SELECT
+            `id`,
+            `user_id`,
+            `exchange_id` AS `exId`,
+            `create_time`,
+            `latest_use_time`,
+            `api_key`,
+            `secret_key`,
+            `api_password`,
+            `nick_name`,
+            `usage_account`
+        FROM
+            `exchange_account`
+        WHERE
+            `user_id` = '${userId}'
+            <if test="exId != null">
+                AND `exchange_id` = '${exId}'
+            </if>
+    </select>
+
+    <select id="getUserExchangeAccountNumById" resultType="java.lang.Integer">
+        SELECT
+            COUNT( `id` )
+        FROM
+            `exchange_account`
+        WHERE
+            `user_id` = '${userId}'
+        <if test="exAccId != null">
+            AND `id` = '${exAccId}'
+        </if>
+    </select>
+
+    <update id="upCoinExchangeAccountById">
+        UPDATE
+            `exchange_account` AS ea
+                INNER JOIN
+            `exchange_account_permissions` AS eap
+                ON ea.`id` = eap.`exchange_account_id`
+        SET
+            ea.`nick_name` = '${upCoinExAcc.nickName}',
+            eap.`ver_code_follow` = #{upCoinExAcc.verCodeFollow},
+            eap.`ver_code` = '${upCoinExAcc.verCode}',
+            eap.`online` = #{upCoinExAcc.online},
+            eap.`money_show` = #{upCoinExAcc.moneyShow},
+            eap.`trade_history` = #{upCoinExAcc.tradeHistory},
+            eap.`option` = #{upCoinExAcc.option}
+        WHERE
+            ea.`user_id` = '${userId}'
+            AND
+            ea.`id` = '${upCoinExAcc.exchangeAccountId}'
+    </update>
+
+    <delete id="delCoinExchangeAccountById">
+        DELETE
+            ea.*, eap.*
+        FROM
+            `exchange_account` AS ea
+                INNER JOIN
+            `exchange_account_permissions` AS eap
+                ON ea.`id` = eap.`exchange_account_id`
+        WHERE
+            ea.`user_id` = '${userId}' AND ea.`id` = '${exAccId}'
+    </delete>
+
+    <resultMap id="coinExchangeAccountKeyMap" type="com.jason.exchange.biz.po.CoinExchangeAccountKeyPo">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="api_key" property="apiKey" javaType="string" jdbcType="VARCHAR"/>
+        <result column="secret_key" property="secretKey" javaType="string" jdbcType="VARCHAR"/>
+        <result column="api_password" property="apiPassword" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getCoinExchangeAccountKeyById" resultMap="coinExchangeAccountKeyMap">
+        SELECT
+            `id`,
+            `api_key`,
+            `secret_key`,
+            `api_password`
+        FROM
+            `exchange_account`
+        WHERE
+            `id` = '${exAccId}'
+            AND
+            `user_id` = '${userId}'
+    </select>
+
+    <select id="getCoinExchangeAccountKeyListById" resultMap="coinExchangeAccountKeyMap">
+        SELECT
+            `id`,
+            `api_key`,
+            `secret_key`,
+            `api_password`
+        FROM
+            `exchange_account`
+        WHERE
+            `user_id` = '${userId}'
+    </select>
+
+    <insert id="addCoinExchangeAccount" useGeneratedKeys="true" keyProperty="addExAcc.id" parameterType="com.jason.exchange.biz.po.AddCoinExchangeAccountPo">
+        INSERT INTO
+            `exchange_account`
+            (
+             `user_id`,
+             `create_time`,
+             `exchange_id`,
+             `api_Key`,
+             `secret_key`,
+             `api_password`,
+             `nick_name`
+            )
+        VALUES
+            (
+             '${userId}',
+             '${createTime}',
+             '${addExAcc.exchangeId}',
+             '${addExAcc.apiKey}',
+             '${addExAcc.secretKey}',
+             '${addExAcc.apiPassword}',
+             '${addExAcc.nickName}'
+            )
+
+    </insert>
+
+    <insert id="addCoinExchangeAccountPer">
+        INSERT INTO
+            `exchange_account_permissions`
+            (
+             `exchange_account_id`,
+             `ver_code_follow`,
+             `ver_code`,
+             `online`,
+             `money_show`,
+             `trade_history`,
+             `option`
+            )
+        VALUE
+            (
+             '${addExAcc.id}',
+             #{addExAcc.verCodeFollow},
+             '${addExAcc.verCode}',
+             #{addExAcc.online},
+             #{addExAcc.moneyShow},
+             #{addExAcc.tradeHistory},
+             #{addExAcc.option}
+            )
+    </insert>
+
+
+</mapper>
