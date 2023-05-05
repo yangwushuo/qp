@@ -45,4 +45,7 @@ public interface UserMapper {
 
     String getUserPasswordById(@Param("uid") Long uid);
 
+    void upUserPwd(@Param("uid") Long uid, @Param("pwd") String pwd);
+
+
 }

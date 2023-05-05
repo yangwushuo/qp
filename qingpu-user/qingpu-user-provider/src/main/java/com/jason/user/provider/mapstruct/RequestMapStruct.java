@@ -1,8 +1,10 @@
 package com.jason.user.provider.mapstruct;
 
 import com.jason.user.biz.bo.UpPhoneAndEmailBo;
+import com.jason.user.biz.bo.UpUserPwdBo;
 import com.jason.user.biz.bo.VerPwdBo;
 import com.qingpu.user.api.request.UpPhoneAndEmailRequest;
+import com.qingpu.user.api.request.UpUserPwdRequest;
 import com.qingpu.user.api.request.VerPwdRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -19,5 +21,7 @@ public interface RequestMapStruct {
     VerPwdBo verPwdRequest2VerPwdBo(VerPwdRequest verPwdRequest);
 
     UpPhoneAndEmailBo upPhoneAndEmailRequest2UpPhoneAndEmailBo(UpPhoneAndEmailRequest upPhoneAndEmailRequest);
+
+    UpUserPwdBo upUserPwdRequest2UpUserPwdBo(UpUserPwdRequest upUserPwdRequest);
 
 }

@@ -3,8 +3,6 @@ package com.jason.user.provider.service;
 import com.jason.common.Result.CommonResult;
 import com.jason.common.entity.HeaderUserInfo;
 import com.jason.common.util.JsonToObject;
-import com.jason.exchange.api.response.CoinExchangeAccountResponse;
-import com.jason.exchange.api.service.ExchangeRemoteService;
 import com.jason.user.biz.bo.AddAccountBo;
 import com.jason.user.biz.bo.FollowBo;
 import com.jason.user.biz.bo.UpUserInfoBo;
@@ -13,10 +11,7 @@ import com.jason.user.biz.service.OssService;
 import com.jason.user.biz.service.UserService;
 import com.jason.user.provider.mapstruct.RequestMapStruct;
 import com.jason.user.provider.mapstruct.ResponseMapStruct;
-import com.qingpu.user.api.request.AddAccountRequest;
-import com.qingpu.user.api.request.UpPhoneAndEmailRequest;
-import com.qingpu.user.api.request.UpUserInfoRequest;
-import com.qingpu.user.api.request.VerPwdRequest;
+import com.qingpu.user.api.request.*;
 import com.qingpu.user.api.response.FollowResponse;
 import com.qingpu.user.api.response.UserInfoResponse;
 import com.qingpu.user.api.service.UserRemoteService;
@@ -38,14 +33,12 @@ public class UserRemoteServiceImpl implements UserRemoteService {
 
     private final OssService ossService;
 
-    private final ExchangeRemoteService exchangeRemoteService;
 
-    public UserRemoteServiceImpl(UserService userService, ResponseMapStruct responseMapStruct, RequestMapStruct requestMapStruct, OssService ossService, ExchangeRemoteService exchangeRemoteService) {
+    public UserRemoteServiceImpl(UserService userService, ResponseMapStruct responseMapStruct, RequestMapStruct requestMapStruct, OssService ossService) {
         this.userService = userService;
         this.responseMapStruct = responseMapStruct;
         this.requestMapStruct = requestMapStruct;
         this.ossService = ossService;
-        this.exchangeRemoteService = exchangeRemoteService;
     }
 
     @Override
@@ -203,16 +196,16 @@ public class UserRemoteServiceImpl implements UserRemoteService {
     }
 
     @Override
-    @ApiOperation(value ="获取用户交易所账号", notes = "ROLE:ADMIN,USER,BOSS")
-    @ApiImplicitParam(paramType = "query", name = "exId", value = "交易所id", required = true)
+    @ApiOperation(value ="更新密码", notes = "ROLE:ADMIN,USER,BOSS")
+    @ApiImplicitParam(paramType = "body", name = "verPwdRequest", value = "更新密码请求", required = true)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "获取成功"),
-            @ApiResponse(code = 500, message = "获取失败")
+            @ApiResponse(code = 200, message = "更新成功"),
+            @ApiResponse(code = 500, message = "更新失败")
     })
-    public CommonResult<?> getUserCoinExchangeAccount(String userInfo, Long exId) {
+    public CommonResult<String> upPassword(String userInfo, UpUserPwdRequest upUserPwdRequest) {
         HeaderUserInfo headerUserInfo = JsonToObject.jsonToClass(userInfo, HeaderUserInfo.class);
-        return exchangeRemoteService.getUserCoinExchangeAccount(headerUserInfo.getId(), exId);
+        userService.upUserPwd(headerUserInfo.getId(), requestMapStruct.upUserPwdRequest2UpUserPwdBo(upUserPwdRequest));
+        return CommonResult.success("更新成功");
     }
-
 
 }

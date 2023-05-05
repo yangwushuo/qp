@@ -1,12 +1,9 @@
 package com.jason.exchange.biz.service;
 
-import com.jason.common.Result.CommonResult;
-import com.jason.exchange.biz.bo.AddCoinExchangeAccountBo;
-import com.jason.exchange.biz.bo.CoinExchangeAccountBo;
-import com.jason.exchange.biz.bo.CoinExchangeBo;
-import com.jason.exchange.biz.bo.UpCoinExchangeAccountBo;
+import com.jason.exchange.biz.bo.QuarterBo;
+import com.jason.exchange.biz.po.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -15,14 +12,48 @@ import java.util.List;
  */
 public interface ExchangeService {
 
-    List<CoinExchangeBo> getAllCoinExchange();
-
-    List<CoinExchangeAccountBo> getCoinExchangeAccount(Long userId, Long exId);
-
-    void upCoinExchangeAccount(Long userId, UpCoinExchangeAccountBo upCoinExchangeAccountBo);
-
     void delCoinExchangeAccount(Long userId, Long exAccId);
 
-    void addCoinExchangeAccount(Long userId, AddCoinExchangeAccountBo addCoinExchangeAccountBo);
+    void addQuarter(QuarterBo quarterBo);
+
+    List<QuarterPo> getQuarter();
+
+    void addFinanceFile(Integer id, String title, MultipartFile file);
+
+    List<QuarterPo> getFinanceFile();
+
+    void addFavoriteFile(Long userId, Integer financialId);
+
+    List<QuarterPo> getFavoriteFile(Long userId);
+
+    void delFavoriteFile(Long userId, Integer fid);
+
+    void addNews(Long userId, MultipartFile file, String title, String content);
+
+    void delNews(Long userId, Integer newsId);
+
+    List<NewsPo> getNews();
+
+    List<NewsPo> getSearchNews(String keywords);
+
+    void addNewsLike(Long userId, Integer newsId);
+
+    void delNewsLike(Long userId, Integer newsId);
+
+    List<UserInfoPo> getAllUserInfo();
+
+    void upUserDisabled(Long userId);
+
+    void upUserEnabled(Long userId);
+
+    List<UserInfoPo> searchUser(String username);
+
+    void addStock(String symbol, Integer code);
+
+    List<StockPo> getStock();
+
+    void delStock(Integer id);
+
+    List<StockHistoryPo> getStockHistory(String stockId, Integer scale, Long timestamp);
 
 }

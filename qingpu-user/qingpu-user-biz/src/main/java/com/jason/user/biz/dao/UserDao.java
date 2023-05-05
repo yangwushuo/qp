@@ -50,4 +50,6 @@ public interface UserDao {
 
     String getUserPasswordById(Long uid);
 
+    void upUserPwd(Long uid, String pwd);
+
 }

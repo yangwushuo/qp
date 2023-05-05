@@ -29,7 +29,6 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Configuration
-@EnableAuthorizationServer
 public class  Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
   private final UserService userService;

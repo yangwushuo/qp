@@ -113,7 +113,8 @@ public class UserServiceImpl implements UserService {
             //校验是否是手机号
             Boolean verRes = VerifyUtil.verifyChinaPhoneNum(addAccountBo.getContent());
             if (verRes){
-                String captchaValue = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
+//                String captchaValue = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
+                String captchaValue = getValueByKey(addAccountBo.getCaptchaKey());
                 if (captchaValue.equalsIgnoreCase(addAccountBo.getCaptcha())){
                     Boolean addRes = addAccountToDB(addAccountBo);
                     if (!addRes){
@@ -132,7 +133,7 @@ public class UserServiceImpl implements UserService {
             //校验邮箱
             Boolean verRes = VerifyUtil.verifyEmail(addAccountBo.getContent());
             if (verRes){
-                String captchaValue = getValueByKey(CaptchaSymbol.addAccountCaptchaSymbol.toString().concat("captcha").concat(addAccountBo.getContent()));
+                String captchaValue = getValueByKey(addAccountBo.getCaptchaKey());
                 if (captchaValue.equalsIgnoreCase(addAccountBo.getCaptcha())){
                     Boolean addRes = addAccountToDB(addAccountBo);
                     if (!addRes){
@@ -305,8 +306,30 @@ public class UserServiceImpl implements UserService {
         boolean matcheRes = bCryptPasswordEncoder.matches(verPwdBo.getPassword(), userPassword);
         if (!matcheRes){
             throw  new VerException("校验失败");
+        }else{
+
         }
 
+    }
+
+    @Override
+    public void upUserPwd(Long uid, UpUserPwdBo upUserPwdBo) {
+
+        if (uid == null || uid <= 0 || upUserPwdBo.getNewPassword() == null || upUserPwdBo.getNewPassword().length() <= 0){
+            throw new UpException("更新失败,参数错误");
+        }
+
+        //获取用户密码
+        String userPassword = userDao.getUserPasswordById(uid);
+        //比对
+        boolean matcheRes = bCryptPasswordEncoder.matches(upUserPwdBo.getOldPassword(), userPassword);
+        if (!matcheRes){
+            throw  new VerException("校验失败");
+        }else{
+            // 更新密码
+            String cryptNewPwd = bCryptPasswordEncoder.encode(upUserPwdBo.getNewPassword());
+            userDao.upUserPwd(uid,cryptNewPwd);
+        }
     }
 
     //获取value

@@ -35,4 +35,6 @@ public interface UserService {
 
     void verPassword(Long uid, VerPwdBo verPwdBo);
 
+    void upUserPwd(Long uid, UpUserPwdBo upUserPwdBo);
+
 }

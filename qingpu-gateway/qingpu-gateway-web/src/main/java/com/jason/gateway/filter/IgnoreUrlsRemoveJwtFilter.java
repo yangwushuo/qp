@@ -52,8 +52,10 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
     //获取请求路径
     URI uri = request.getURI();
     PathMatcher pathMatcher = new AntPathMatcher();
+    System.out.println("jason:)白名单"+ignoreUrls.size());
     // 白名单路径移除JWT请求头
     for (String ignoreUrl : ignoreUrls) {
+      System.out.println(ignoreUrl+uri.getPath());
       if (pathMatcher.match(ignoreUrl, uri.getPath())) {
         request = exchange.getRequest().mutate().header("Authorization", "").build();
         exchange = exchange.mutate().request(request).build();

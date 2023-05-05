@@ -25,6 +25,9 @@ public class AddAccountRequest {
     @ApiModelProperty("密码")
     private String password;
 
+    @ApiModelProperty("验证码key")
+    private String captchaKey;
+
     @ApiModelProperty("验证码")
     private String captcha;
 

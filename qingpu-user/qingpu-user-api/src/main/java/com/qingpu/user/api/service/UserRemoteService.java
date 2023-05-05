@@ -2,10 +2,7 @@ package com.qingpu.user.api.service;
 
 import com.jason.common.Result.CommonResult;
 import com.qingpu.user.api.fallback.UserRemoteServiceFallbackFactory;
-import com.qingpu.user.api.request.AddAccountRequest;
-import com.qingpu.user.api.request.UpPhoneAndEmailRequest;
-import com.qingpu.user.api.request.UpUserInfoRequest;
-import com.qingpu.user.api.request.VerPwdRequest;
+import com.qingpu.user.api.request.*;
 import com.qingpu.user.api.response.FollowResponse;
 import com.qingpu.user.api.response.UserInfoResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -144,17 +141,13 @@ public interface UserRemoteService {
     CommonResult<String> verPassword(@RequestHeader("user")String userInfo, @RequestBody VerPwdRequest verPwdRequest);
 
     /**
-     * @return a
      * @Author yangwushuo
-     * @Decription //TODO 用户交易所账号信息
-     * @Date 15:52 2022/11/18
+     * @Description //TODO
+     * @Date 22:48 2022/11/14
      * @Param
+     * @return
      **/
-    @GetMapping("/user/ex/acc/coin")
-    CommonResult<?> getUserCoinExchangeAccount(
-            @RequestHeader("user")String userInfo,
-            @RequestParam(value = "exId", required = false) Long exId
-    );
-
+    @PutMapping("/user/up_pwd")
+    CommonResult<String> upPassword(@RequestHeader("user")String userInfo, @RequestBody UpUserPwdRequest upUserPwdRequest);
 
 }

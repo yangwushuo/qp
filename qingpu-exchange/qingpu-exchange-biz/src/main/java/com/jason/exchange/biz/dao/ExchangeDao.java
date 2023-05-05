@@ -1,9 +1,9 @@
 package com.jason.exchange.biz.dao;
 
-import com.jason.exchange.biz.bo.AddCoinExchangeAccountBo;
-import com.jason.exchange.biz.bo.CoinExchangeAccountBo;
+
 import com.jason.exchange.biz.po.*;
-import org.apache.ibatis.annotations.Param;
+import io.swagger.models.auth.In;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,22 +13,48 @@ import java.util.List;
  */
 public interface ExchangeDao {
 
-    List<CoinExchangePo> getAllExchange();
+    void addQuarter(QuarterPo quarterPo);
 
-    List<CoinExchangeAccountPo> getCoinExchangeAccountById(Long userId, Long exId);
+    List<QuarterPo> getQuarter();
 
-    Integer getCoinExchangeAccountNumById(Long userId, Long exAccId);
+    void addFinanceFile(Integer id, String title, String url);
 
-    void upCoinExchangeAccountById(Long userId, UpCoinExchangeAccountPo upCoinExchangeAccountPo);
+    List<FinancePo> getFinance(Integer id);
 
-    void delCoinExchangeAccountById(Long userId, Long exAccId);
+    void addFavoriteFile(Long userId, Integer financialId);
 
-    CoinExchangeAccountKeyPo getCoinExchangeAccountKeyById(Long userId, Long exAccId);
+    List<FavoriteFilesPo> getFavoriteFile(Long userId);
 
-    List<CoinExchangeAccountKeyPo> getCoinExchangeAccountKeyListById(Long userId);
+    void delFavoriteFile(Long userId, Integer fid);
 
-    void addCoinExchangeAccount(Long userId, Long createTime, AddCoinExchangeAccountPo addCoinExchangeAccountPo);
+    void addNews(Long userId, String url, String title, String content);
 
-    void addCoinExchangeAccountPer(AddCoinExchangeAccountPo addCoinExchangeAccountPo);
+    void delNews(Long userId, Integer newsId);
+
+    List<NewsPo> getNews();
+
+    List<NewsPo> getSearchNews(String keywords);
+
+    UserInfoPo getUserInfo(Long userId);
+
+    List<Long> getNewsLike(Integer newsId);
+
+    void addNewsLike(Long userId, Integer newsId);
+
+    void delNewsLike(Long userId, Integer newsId);
+
+    List<UserInfoPo> getAllUserInfo();
+
+    void upUserDisabled(Long userId);
+
+    void upUserEnabled(Long userId);
+
+    List<UserInfoPo> searchUser(String username);
+
+    void addStock(String symbol, Integer code);
+
+    List<StockPo> getStock();
+
+    void delStock(Integer id);
 
 }

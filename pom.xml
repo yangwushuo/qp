@@ -16,8 +16,7 @@
         <module>qingpu-auth</module>
         <module>qingpu-elasticsearch</module>
         <module>qingpu-common-service</module>
-        <module>qingpu-binance</module>
-        <module>qingpu-binance/qingpu-binance-biz</module>
+
     </modules>
 
     <developers>

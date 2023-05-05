@@ -1,10 +1,7 @@
 package com.qingpu.user.api.fallback;
 
 import com.jason.common.Result.CommonResult;
-import com.qingpu.user.api.request.AddAccountRequest;
-import com.qingpu.user.api.request.UpPhoneAndEmailRequest;
-import com.qingpu.user.api.request.UpUserInfoRequest;
-import com.qingpu.user.api.request.VerPwdRequest;
+import com.qingpu.user.api.request.*;
 import com.qingpu.user.api.response.FollowResponse;
 import com.qingpu.user.api.response.UserInfoResponse;
 import com.qingpu.user.api.service.UserRemoteService;
@@ -85,8 +82,8 @@ public class UserRemoteServiceFallbackFactory implements FallbackFactory<UserRem
             }
 
             @Override
-            public CommonResult<String> getUserCoinExchangeAccount(String userInfo, Long exId) {
-                return CommonResult.failed("获取失败");
+            public CommonResult<String> upPassword(String userInfo, UpUserPwdRequest upUserPwdRequest) {
+                return CommonResult.failed("更新失败");
             }
         };
     }

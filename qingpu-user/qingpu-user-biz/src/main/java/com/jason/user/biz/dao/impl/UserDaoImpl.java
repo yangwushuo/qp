@@ -100,4 +100,9 @@ public class UserDaoImpl implements UserDao {
         return userMapper.getUserPasswordById(uid);
     }
 
+    @Override
+    public void upUserPwd(Long uid, String pwd) {
+        userMapper.upUserPwd(uid, pwd);
+    }
+
 }

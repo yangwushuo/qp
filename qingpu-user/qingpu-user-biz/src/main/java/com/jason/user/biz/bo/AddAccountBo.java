@@ -19,6 +19,8 @@ public class AddAccountBo {
 
     private String password;
 
+    private String captchaKey;
+
     private String captcha;
 
     private Long timestamp;

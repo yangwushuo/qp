@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.jason.binance.api.autoconfigure.RemoteServiceAutoConfigure

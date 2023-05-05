@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     String[] usernameSplit = username.split(":");
+    System.out.println("jason:)"+usernameSplit[1]);
     Integer flag = Integer.valueOf(usernameSplit[0]);
     String content = usernameSplit[1];
 

@@ -1,10 +1,7 @@
 package com.jason.exchange.provider.mapstruct;
 
-import com.jason.exchange.api.request.AddCoinExchangeAccountRequest;
-import com.jason.exchange.api.request.UpCoinExchangeAccountRequest;
-import com.jason.exchange.biz.bo.AddCoinExchangeAccountBo;
-import com.jason.exchange.biz.bo.UpCoinExchangeAccountBo;
-import com.jason.exchange.biz.mapstruct.CoinExchangeMapStruct;
+import com.jason.exchange.api.request.QuarterRequest;
+import com.jason.exchange.biz.bo.QuarterBo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -17,7 +14,6 @@ public interface RequestMapStruct {
 
     RequestMapStruct INSTANCE = Mappers.getMapper(RequestMapStruct.class);
 
-    UpCoinExchangeAccountBo upCoinExchangeAccountRequest2Bo(UpCoinExchangeAccountRequest upCoinExchangeAccountRequest);
+    QuarterBo quarterRequest2Bo(QuarterRequest quarterRequest);
 
-    AddCoinExchangeAccountBo addCoinExchangeAccountRequest2Bo(AddCoinExchangeAccountRequest addCoinExchangeAccountRequest);
 }
